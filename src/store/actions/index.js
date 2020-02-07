@@ -1,6 +1,6 @@
-export const updateHeaderTitle = title => {
+export const saveUserInfo = user => {
     return {
-        type: 'TITLE_UPDATE',
-        title
+        type: 'SAVE_USER',
+        user
     }
 }

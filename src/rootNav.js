@@ -3,12 +3,13 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { StatusBar, TextInput, StyleSheet, Dimensions } from 'react-native'
 import Tab from './components/Tab'
-import Login from './components/login'
+import LoginContainer from './containers/LoginContainer'
 import Register from './components/register'
 import Publish from './components/publish'
 import JobPublish from './components/publish/jobPublish'
 import PostPublish from './components/publish/postPublish'
 import SalePublish from './components/publish/salePublish'
+import CommunicationDetailContainer from './containers/CommunicationDetailContainer'
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 
@@ -51,7 +52,8 @@ const Main = createStackNavigator(
         Tab,
         JobPublish,
         PostPublish,
-        SalePublish
+        SalePublish,
+        CommunicationDetailContainer
     },
     {
         mode: 'card',
@@ -61,7 +63,7 @@ const Main = createStackNavigator(
 )
 const StackNavigator = createStackNavigator(
   {
-    Login,
+    LoginContainer,
     Register,
     Main,
     Publish

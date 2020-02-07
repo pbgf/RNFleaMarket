@@ -1,22 +1,29 @@
 import reducers from './reducers';
 import { createStore, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
-import logger from 'redux-logger';
-import { composeWithDevTools } from 'redux-devtools-extension';
-import { createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers';
+//import thunk from 'redux-thunk';
+import { createLogger } from 'redux-logger';
+import thunk from 'redux-thunk'
+const middleware = [ thunk ];
 
-const navigator = createReactNavigationReduxMiddleware(
-  "root",
-  state => state.Navigator
-);
+if (process.env.NODE_ENV !== 'production') {
+  middleware.push(createLogger());
+}
+
+const store = createStore(
+  reducers,
+  applyMiddleware(...middleware)
+)
+store.subscribe(() => console.log(store.getState()))
+
+export default store
 
 // if (__DEV__) {
 //   middlewares.push(logger);
 // }
 
-export default createStore(reducers, composeWithDevTools(
-  applyMiddleware(
-    thunk,
-    navigator,
-  ),
-))
+// export default createStore(reducers, composeWithDevTools(
+//   applyMiddleware(
+//     thunk,
+//     navigator,
+//   ),
+// ))

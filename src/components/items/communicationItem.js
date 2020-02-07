@@ -11,9 +11,9 @@ import { width as screenWidth } from '../../config/device'
 import FastImage from 'react-native-fast-image'
 import IconItem from '../base/iconItem'
 
-export default function communicationItmes(props) {
-    const { user, text, img, publishTime } = props //只能发一张图片
-    const { userIcon, userName } = user
+export default function communicationItem(props) {
+    const { publishUser, text, img, publishTime, id, userInfo, navigation } = props //只能发一张图片
+    const { userIcon, userName } = publishUser
     const { width, height, url } = img
     const [isLoad, setIsLoad] = useState(false)
     const [isLike, setIsLike] = useState(false)
@@ -23,6 +23,10 @@ export default function communicationItmes(props) {
     Image.getSize(url,() => {
         setIsLoad(true)
     })
+    const jumpToDetail = () => {
+        navigation.setParams('communicationId', id)
+        navigation.navigate('CommunicationDetailContainer')
+    }
     useEffect(()=>{},[isLoad,isLike])
     // const loadSuccess = () => {
     //     setIsLoad(!isLoad)
@@ -74,7 +78,7 @@ export default function communicationItmes(props) {
                         <Text>{likeCnt}</Text>
                     </TouchableOpacity>
                 }
-                <TouchableOpacity style={styles.iconContainer} activeOpacity={0.7} onPress={()=>{props.navigation.navigate('Login')}}>
+                <TouchableOpacity style={styles.iconContainer} activeOpacity={0.7} onPress={jumpToDetail}>
                     <Image style={styles.IconItem} source={{uri:'message'}} />
                     <Text>{commentCnt}</Text>
                 </TouchableOpacity>

@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
+    "dev": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
@@ -11,8 +12,11 @@
   },
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.5",
+    "axios": "^0.19.2",
+    "js-md5": "^0.7.3",
     "react": "16.9.0",
     "react-native": "0.61.5",
+    "react-native-axios": "^0.17.1",
     "react-native-fast-image": "^7.0.2",
     "react-native-gesture-handler": "^1.5.3",
     "react-native-image-crop-picker": "^0.27.0",

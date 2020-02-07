@@ -5,7 +5,7 @@ import {
     Button,
     FlatList
  } from 'react-native';
-import CommunicationItem from '../items/communicationItem'
+import CommunicationItemContainer from '../../containers/CommunicationItemContainer'
 
 export default function HomeScreen (props) {
     const [lists,updateLists] = useState([
@@ -58,13 +58,14 @@ export default function HomeScreen (props) {
             style={{width:'100%'}}
             data={lists}
             renderItem={ ({item}) => 
-                <CommunicationItem 
-                    user={item.user} 
+                <CommunicationItemContainer
+                    publishUser={item.user} 
                     publishTime={item.publishTime} 
                     img={item.img?item.img:''}
                     text={item.text}
                     navigation={props.navigation}
-                     />
+                    id={'f26a93834d86445eb323e91cae42f309'}
+                    />
             }
         ></FlatList>
     </View>
