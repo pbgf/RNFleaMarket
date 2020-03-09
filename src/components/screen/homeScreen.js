@@ -11,8 +11,8 @@ export default function HomeScreen (props) {
     const [lists,updateLists] = useState([
         {
             user:{
-                userIcon:'',
-                userName:'hyq'
+                icon:'',
+                user_name:'hyq'
             },
             text:'测试文本，哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈测试文本，哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
             img:{
@@ -21,12 +21,16 @@ export default function HomeScreen (props) {
                 height:'1200'
             },
             publishTime:'2020-01-26',
-            key:'1'
+            title:'test',
+            key:'1',
+            like_cnt:1000,
+            comment_cnt:1,
+            Id:'f26a93834d86445eb323e91cae42f309'
         },
         {
             user:{
-                userIcon:'',
-                userName:'test'
+                icon:'',
+                user_name:'test'
             },
             text:'用于显示多种不同类型图片的 React 组件，包括网络图片、静态资源、临时的本地图片、以及本地磁盘上的图片（如相册）等。',
             img:{
@@ -35,12 +39,14 @@ export default function HomeScreen (props) {
                 height:'1200'
             },
             publishTime:'2020-01-26',
-            key:'2'
+            key:'2',
+            like_cnt:1000,
+            comment_cnt:1
         },
         {
             user:{
-                userIcon:'',
-                userName:'hhhh'
+                icon:'',
+                user_name:'hhhh'
             },
             text:'React Native可以通过Image组件显示图片。既可以加载网络图片,也可以加载本地资源图片。接下来，我们介绍React Native加载图片的几种方式',
             img:{
@@ -49,7 +55,9 @@ export default function HomeScreen (props) {
                 height:'1200'
             },
             publishTime:'2020-01-26',
-            key:'3'
+            key:'3',
+            like_cnt:1000,
+            comment_cnt:1
         },
     ]) 
     return (
@@ -59,12 +67,8 @@ export default function HomeScreen (props) {
             data={lists}
             renderItem={ ({item}) => 
                 <CommunicationItemContainer
-                    publishUser={item.user} 
-                    publishTime={item.publishTime} 
-                    img={item.img?item.img:''}
-                    text={item.text}
+                    item={item}
                     navigation={props.navigation}
-                    id={'f26a93834d86445eb323e91cae42f309'}
                     />
             }
         ></FlatList>

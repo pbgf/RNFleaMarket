@@ -1,10 +1,16 @@
 import React from 'react'
 import {
     TouchableOpacity,
-    StyleSheet
+    StyleSheet,
+    Image
 } from 'react-native'
 
-export default function (props) {
+export interface Props{
+    pressEvent:() => void,
+    url:string
+}
+
+export default function (props:Props) {
     const { pressEvent, url } = props
     return (
         <TouchableOpacity style={styles.container} activeOpacity={0.7} onPress={pressEvent}>

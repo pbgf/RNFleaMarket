@@ -10,11 +10,9 @@ const mapStateToProps= (state) => {
 }
 
 function CommunicationDetailContainer (props) {
-    const { user, navigation } = props
+    const { userInfo, navigation } = props
     return (
-        <View>
-            <CommunicationDetail userInfo={userInfo} navigation={navigation} />
-        </View>
+        <CommunicationDetail userInfo={userInfo} navigation={navigation} />
     )
 }
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useImperativeHandle, forwardRef } from 'react'
+import React, { useState, useEffect, useImperativeHandle, forwardRef, useRef } from 'react'
 import {
     View,
     Text,
@@ -6,6 +6,7 @@ import {
     Dimensions,
     StyleSheet,
 } from 'react-native'
+import { _get } from '../../common/index'
 
 const {height, width} = Dimensions.get('window');
 
@@ -22,14 +23,21 @@ const defaultProps = {
     }
 }
 
-let timer, animation
-function Toast (props = defaultProps, ref) {
+export interface Props {
+    position?: string,
+    textStyle?: {
+        color:string
+    }
+}
+
+let timer:number, animation:Animated.CompositeAnimation
+function Toast (props:Props = defaultProps, ref:React.Ref<any>) {
     const [state, setState] = useState({
         isShow: false,
         text: ''
     })
     const [opacityValue] = useState(new Animated.Value(defaultConfig.opacity))
-    const close = function (callback) {
+    const close = function (callback:Function) {
         timer && clearTimeout(timer)
         timer = setTimeout(() => {
             animation = Animated.timing(
@@ -41,10 +49,12 @@ function Toast (props = defaultProps, ref) {
             )
             animation.start(() => {
                 setState({
-                    isShow:false
+                    isShow:false,
+                    text: state.text
                 })
                 callback && callback()
-                animation.reset()
+                _get(animation, 'reset')()
+                //animation.reset()
             })
         })
     }
@@ -55,7 +65,7 @@ function Toast (props = defaultProps, ref) {
         }
     },[])
     useImperativeHandle(ref, () => ({
-        show: (text, callback) => {
+        show: (text:string, callback:() => void) => {
             setState({
                 isShow: true,
                 text: text
@@ -85,10 +95,12 @@ function Toast (props = defaultProps, ref) {
 
 const styles = StyleSheet.create({
     container: {
-        flex:1,
+        display:'flex',
+        alignItems:'center',
         position: 'absolute',
-        top: height/2,
+        top: height/2 - 20,
         zIndex: 10000,
+        width:'100%'
     },
     content: {
         backgroundColor: 'black',

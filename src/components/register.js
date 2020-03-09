@@ -21,7 +21,7 @@ const Register = (props) => {
     const [userName_val,onChangeUserName] = useState('')
     const [passwd_val,onChangePasswd] = useState('')
     const [isUpload,onChangeIsUpload] = useState(false)
-    const toast_ref = useRef()
+    const toast_ref = global.toast_ref
     //const toast_com = toast_ref.current;
     const [imgPath,onChangeImgPath] = useState('')
     const [formData,setFormData] = useState(new FormData()) 
@@ -45,7 +45,7 @@ const Register = (props) => {
         return telePhone_val && QQTel_val && userName_val && passwd_val && isUpload
     }
     const registerHandler = () => {
-        if(isEmpty){
+        if(isEmpty()){
             formData.append('telephone', telePhone_val)
             formData.append('qq', QQTel_val)
             formData.append('user_name', userName_val)
@@ -120,7 +120,6 @@ const Register = (props) => {
                     isRadius={true}
                     onPress={()=>{registerHandler()}} width="70%"/>
             </View>
-            <Toast ref={toast_ref} />
         </View>
     )
 }

@@ -6,10 +6,11 @@ import {
     StyleSheet
 } from 'react-native'
 export default function myButton (props) {
-    const { title, backgroundColor, onPress, isRadius, width, height } = props
+    const { title, backgroundColor, onPress, isRadius, width, height, color } = props
     let buttonStyle = Object.assign(
         {
             alignItems: 'center',
+            justifyContent:'center',
             padding: 10
         },
         {
@@ -37,7 +38,7 @@ export default function myButton (props) {
                 activeOpacity={0.7}
                 onPress={onPress}
             >
-                <Text style={{color:'white'}}> {title} </Text>
+                <Text style={color?color:{color:'white'}}> {title} </Text>
             </TouchableOpacity>
         </View>
     )

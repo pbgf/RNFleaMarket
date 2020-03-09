@@ -10,13 +10,21 @@ import MyButton from './button/myButton'
 import api from '../api/index'
 import Toast from '../components/base/Toast'
 import md5 from 'js-md5'
+import { NavigationScreenProp } from 'react-navigation'
 
-export default (props) => {
+export interface Props {
+    saveUser: Function,
+    navigation: NavigationScreenProp<any>
+}
+
+export default (props: Props) => {
     const [telePhone_val,OnChangeTelePhone] = useState('')
     const [passwd_val, onChangePasswd] = useState('')
     const { saveUser } = props
-    const toast_ref = useRef()
+    const toast_ref = global.toast_ref
     const login = () => {
+        // props.navigation.navigate('Tab')
+        // console.profile('logining')
         if(telePhone_val&&passwd_val){
             const user = {
                 telePhone_val,
@@ -70,26 +78,24 @@ export default (props) => {
                     isRadius={true}
                     onPress={()=>{props.navigation.navigate('Register')}} width="70%"/>
             </View>
-            <Toast ref={toast_ref} />
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     container:{
-        flex:0.55,
+        flex:0.8,
         flexDirection: 'column',
         justifyContent:'center',
-        alignItems:'center'
+        alignItems:'center',
     },
     title:{
-        flex:0.1,
         justifyContent:'center',
         alignItems:'center',
-        padding:100
+        width:'100%',
+        height:200,
     },
     content:{
-        flex:0.9,
         width:'100%',
         flexDirection: 'column',
         justifyContent:'center',

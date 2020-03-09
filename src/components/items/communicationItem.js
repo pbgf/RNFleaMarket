@@ -10,24 +10,26 @@ import {
 import { width as screenWidth } from '../../config/device'
 import FastImage from 'react-native-fast-image'
 import IconItem from '../base/iconItem'
+import Like from '../base/like'
 
 export default function communicationItem(props) {
-    const { publishUser, text, img, publishTime, id, userInfo, navigation } = props //只能发一张图片
-    const { userIcon, userName } = publishUser
+    const { user, text, img, publishTime, Id, title, like_cnt, comment_cnt } = props.item //只能发一张图片
+    const { navigation, userInfo } = props
+    const { icon, user_name } = user
     const { width, height, url } = img
     const [isLoad, setIsLoad] = useState(false)
-    const [isLike, setIsLike] = useState(false)
-    const [likeCnt,setLikeCnt] = useState(1000)
-    const [commentCnt, setCommentCnt] = useState(0)
+    const [commentCnt, setCommentCnt] = useState(comment_cnt)
     const myHeight = Math.floor(screenWidth/width*height)
     Image.getSize(url,() => {
         setIsLoad(true)
     })
     const jumpToDetail = () => {
-        navigation.setParams('communicationId', id)
-        navigation.navigate('CommunicationDetailContainer')
+        navigation.navigate('CommunicationDetailContainer', {
+            communicationId: Id,
+            title: title
+        })
     }
-    useEffect(()=>{},[isLoad,isLike])
+    useEffect(()=>{},[isLoad])
     // const loadSuccess = () => {
     //     setIsLoad(!isLoad)
     // }
@@ -48,7 +50,7 @@ export default function communicationItem(props) {
                     <Image style={styles.userIcon} source={{uri:'default_header'}}></Image>
                 </View>
                 <View style={styles.column}>
-                    <Text>{userName}</Text>
+                    <Text>{user_name}</Text>
                     <Text>{publishTime}</Text>
                 </View>
             </View>
@@ -65,19 +67,9 @@ export default function communicationItem(props) {
                 }
             </View>
             <View style={styles.bottomBar}>
-                {
-                    <TouchableOpacity style={styles.iconContainer} activeOpacity={1} onPress={()=>{
-                            setIsLike(!isLike)
-                            if(!isLike){
-                                setLikeCnt(likeCnt+1)
-                            }else{
-                                setLikeCnt(likeCnt-1)
-                            }
-                        }}>
-                        {isLike?<Image style={styles.IconItem} source={{uri:'like_filled'}} />:<Image style={styles.IconItem} source={{uri:'like'}}/>}
-                        <Text>{likeCnt}</Text>
-                    </TouchableOpacity>
-                }
+                
+                <Like style={styles.iconContainer} likeCnt={like_cnt} />
+                
                 <TouchableOpacity style={styles.iconContainer} activeOpacity={0.7} onPress={jumpToDetail}>
                     <Image style={styles.IconItem} source={{uri:'message'}} />
                     <Text>{commentCnt}</Text>
