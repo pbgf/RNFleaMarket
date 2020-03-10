@@ -1,5 +1,10 @@
 import React, { useState, useEffect, Component }  from 'react';
 import { Text, View, Button } from 'react-native';
+
+export interface Props {
+
+}
+
 export default function meScreen() {
   const [count, setCount] = useState(0);
 
@@ -11,7 +16,7 @@ export default function meScreen() {
 
   return (
     <View>
-      <Text>publish</Text>
+      <Text>second</Text>
     </View>
   );
 }

@@ -6,11 +6,11 @@ import {
     TouchableOpacity
 } from 'react-native'
 import { Item } from '../screen/jobsScreen'
-import { NavigationScreenProp } from 'react-navigation'
+import { NavigationScreenProp, NavigationState } from 'react-navigation'
 
 export interface Props{
     item:Item,
-    navigation:NavigationScreenProp<any>
+    navigation:NavigationScreenProp<NavigationState>
 }
 
 export default function (props:Props) {

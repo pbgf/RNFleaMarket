@@ -9,8 +9,13 @@ import {
 	Image,
 } from 'react-native';
 import { width } from '../../config/device'
+import { NavigationScreenProp } from 'react-navigation'
 
-export default function Publish(props)  {
+export interface Props{
+	navigation: NavigationScreenProp<any>
+}
+
+export default function Publish(props: Props)  {
 	const data = [
         {key: 'publish_tiezi', title: '发帖子', url:'PostPublish'},
         {key: 'publish_jobs', title: '发招聘', url:'JobPublish'},
@@ -18,6 +23,7 @@ export default function Publish(props)  {
 	]
 
 	const _renderItem = (data) => {
+		console.log(data)
 		return (
 			<TouchableOpacity 
 				style={styles.item} 

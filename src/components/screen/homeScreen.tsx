@@ -6,8 +6,13 @@ import {
     FlatList
  } from 'react-native';
 import CommunicationItemContainer from '../../containers/CommunicationItemContainer'
+import { NavigationScreenProp, NavigationState } from 'react-navigation'
 
-export default function HomeScreen (props) {
+export interface Props{
+    navigation:NavigationScreenProp<NavigationState>
+}
+
+export default function HomeScreen (props: Props) {
     const [lists,updateLists] = useState([
         {
             user:{

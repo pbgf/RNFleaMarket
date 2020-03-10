@@ -9,11 +9,15 @@ import {
 import Like from '../base/like'
 import { base_path } from '../../api/'
 
-export default function CommentItem (props) {
-    const _onPressUser = (user) => {
-        const { onPressUser } = props;
-        onPressUser && onPressUser(user);
-    }
+export interface Props {
+    item: any
+}
+
+export default function CommentItem (props: Props) {
+    // const _onPressUser = (user) => {
+    //     const { onPressUser } = props;
+    //     onPressUser && onPressUser(user);
+    // }
 
     const _renderHeader = () => {
         const { item } = props
@@ -48,7 +52,7 @@ export default function CommentItem (props) {
         )
     }
 
-    const _onPressContent = (item) => {
+    const _onPressContent = (item: any) => {
         const { onPressContent } = props
         onPressContent && onPressContent(item);
     }

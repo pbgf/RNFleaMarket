@@ -1,13 +1,26 @@
-import React, { useState } from 'react'
+import React, { useState, ReactNode } from 'react'
 import {
-    TouchableOpacity,
     View,
-    Text
+    Text,
+    StyleSheet,
+    TouchableOpacity,
 } from 'react-native'
-export default function TabBar (props) { 
+import { NavigationScreenProp, NavigationState } from 'react-navigation'
+
+export interface Props{
+    navigation: NavigationScreenProp<NavigationState>,
+    jumpTo: (param: string) => void,
+    activeTintColor: string,
+    inactiveTintColor: string,
+    getLabelText: (param: any) => string,
+    renderIcon: (param: any) => ReactNode
+}
+
+export default function TabBar (props: Props) { 
+    console.log(props)
     const { navigation } = props
     const { routes } = navigation.state
-    const renderItem = (route, index) => {
+    const renderItem = (route: NavigationState, index: number) => {
         const { navigation, jumpTo, activeTintColor, inactiveTintColor } = props
         const focused = (index === navigation.state.index)
         const color = focused ? activeTintColor : inactiveTintColor
@@ -52,7 +65,7 @@ export default function TabBar (props) {
         </View>
     )
 }
-const styles = {
+const styles = StyleSheet.create({
     tab: {
         backgroundColor: '#fff',
         flexDirection:'row',
@@ -70,5 +83,5 @@ const styles = {
         width:49,
         alignItems:'center',
         justifyContent:'center'
-    },
-}
+    }
+})

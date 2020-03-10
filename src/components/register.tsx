@@ -14,8 +14,14 @@ import Toast from '../components/base/Toast'
 import ImagePicker from 'react-native-image-crop-picker'
 import { guid } from '../common'
 import md5 from 'js-md5'
+import { NavigationScreenProp, NavigationState } from 'react-navigation'
+import { Image as ImageType } from 'react-native-image-crop-picker'
 
-const Register = (props) => {
+export interface Props{
+    navigation: NavigationScreenProp<NavigationState>
+}
+
+const Register = (props: Props) => {
     const [telePhone_val,OnChangeTelePhone] = useState('')
     const [QQTel_val,onChangeQQTel] = useState('')
     const [userName_val,onChangeUserName] = useState('')
@@ -30,15 +36,17 @@ const Register = (props) => {
         ImagePicker.openPicker({
             cropping: true,
             width: 300,
-            height: 300
-          }).then(image => {
+            height: 300,
+            multiple: false
+          }).then((image: ImageType | Array<ImageType>) => {
+            image = (image as ImageType)
             file = { uri:image.path, type:image.mime, size:image.size, name: guid() }
             formData.append('file', file)
             onChangeIsUpload(true)
             onChangeImgPath(image.path)
           })
     }
-    const isNumber = (value) => {
+    const isNumber = (value:any) => {
         return !isNaN(value/1)
     }
     const isEmpty = () => {

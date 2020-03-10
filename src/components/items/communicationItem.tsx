@@ -11,8 +11,16 @@ import { width as screenWidth } from '../../config/device'
 import FastImage from 'react-native-fast-image'
 import IconItem from '../base/iconItem'
 import Like from '../base/like'
+import { NavigationScreenProp, NavigationState } from 'react-navigation'
+import { UserState } from '../../store/reducers/user'
 
-export default function communicationItem(props) {
+export interface Props {
+    item: any,
+    navigation: NavigationScreenProp<NavigationState>,
+    userInfo: UserState
+}
+
+export default function communicationItem(props:Props) {
     const { user, text, img, publishTime, Id, title, like_cnt, comment_cnt } = props.item //只能发一张图片
     const { navigation, userInfo } = props
     const { icon, user_name } = user
@@ -22,6 +30,8 @@ export default function communicationItem(props) {
     const myHeight = Math.floor(screenWidth/width*height)
     Image.getSize(url,() => {
         setIsLoad(true)
+    },(err) => {
+        console.log(err)
     })
     const jumpToDetail = () => {
         navigation.navigate('CommunicationDetailContainer', {
@@ -68,7 +78,7 @@ export default function communicationItem(props) {
             </View>
             <View style={styles.bottomBar}>
                 
-                <Like style={styles.iconContainer} likeCnt={like_cnt} />
+                <Like likeCnt={like_cnt} />
                 
                 <TouchableOpacity style={styles.iconContainer} activeOpacity={0.7} onPress={jumpToDetail}>
                     <Image style={styles.IconItem} source={{uri:'message'}} />

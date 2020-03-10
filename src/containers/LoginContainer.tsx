@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import React from 'react'
 import { View } from 'react-native'
 import Login from '../components/login'
-import { NavigationScreenProp } from 'react-navigation'
+import { NavigationScreenProp, NavigationState } from 'react-navigation'
 import {
     saveUserInfo
 } from '../store/actions/index'
@@ -16,7 +16,7 @@ const mapStateToProps = ({user}:State) => {
 }
 
 export interface Props { 
-    navigation:NavigationScreenProp<any>,
+    navigation:NavigationScreenProp<NavigationState>,
     dispatch: Function
 }
 

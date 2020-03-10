@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import React from 'react'
 import { View } from 'react-native'
 import CommunicationItem from '../components/items/communicationItem'
-import { NavigationScreenProp } from 'react-navigation'
+import { NavigationScreenProp, NavigationState } from 'react-navigation'
 import { State } from '../store/reducers/'
 import { UserState } from '../store/reducers/user'
 
@@ -13,7 +13,7 @@ const mapStateToProps = ({user}:State) => {
 }
 
 export interface Props {
-    navigation: NavigationScreenProp<any>,
+    navigation: NavigationScreenProp<NavigationState>,
     userInfo: UserState,
     item: any
 }

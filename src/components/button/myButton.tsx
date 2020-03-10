@@ -5,7 +5,18 @@ import {
     TouchableOpacity,
     StyleSheet
 } from 'react-native'
-export default function myButton (props) {
+
+export interface Props {
+    title: string,
+    backgroundColor: string,
+    onPress: () => void,
+    isRadius: boolean,
+    width: number | string,
+    height: number | string,
+    color: string
+}
+
+export default function myButton (props: Props) {
     const { title, backgroundColor, onPress, isRadius, width, height, color } = props
     let buttonStyle = Object.assign(
         {

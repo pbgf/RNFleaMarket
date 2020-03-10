@@ -11,9 +11,16 @@ import {
 import CommentItem from '../items/commentItem'
 import api from '../../api'
 import { width as screenWidth } from '../../config/device'
+import { NavigationScreenProp, NavigationState } from 'react-navigation'
+import { UserState } from '../../store/reducers/user'
 
-let myHeight
-export default function (props) {
+export interface Props {
+    navigation: NavigationScreenProp<NavigationState>,
+    userInfo: UserState
+}
+
+let myHeight: number
+export default function (props: Props) {
     const { userInfo, navigation } = props
     const [lists,setLists] = useState([])
     const [content,setContent] = useState({

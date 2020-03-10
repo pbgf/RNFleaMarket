@@ -1,20 +1,22 @@
 import React, { useState, useEffect, Component }  from 'react';
 import { Text, View, Button } from 'react-native';
-function meScreen(props) {
+
+export interface Props {
+
+}
+
+export default function meScreen() {
   const [count, setCount] = useState(0);
-  
+
   // Similar to componentDidMount and componentDidUpdate:
-  
   useEffect(() => {
-    //console.log(props.navigation.setParams({title: '我的'}))
+    // Update the document title using the browser API
+    //document.title = `You clicked ${count} times`;
   });
 
   return (
     <View>
-      <Text>You clicked {count} times</Text>
-        <Button title="click me" onPress={() => setCount(count + 1)}>
-      </Button>
+      <Text>publish</Text>
     </View>
   );
 }
-export default meScreen

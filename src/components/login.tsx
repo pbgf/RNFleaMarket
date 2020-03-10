@@ -10,11 +10,11 @@ import MyButton from './button/myButton'
 import api from '../api/index'
 import Toast from '../components/base/Toast'
 import md5 from 'js-md5'
-import { NavigationScreenProp } from 'react-navigation'
+import { NavigationScreenProp, NavigationState } from 'react-navigation'
 
 export interface Props {
     saveUser: Function,
-    navigation: NavigationScreenProp<any>
+    navigation: NavigationScreenProp<NavigationState>
 }
 
 export default (props: Props) => {
