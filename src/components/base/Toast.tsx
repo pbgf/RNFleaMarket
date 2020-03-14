@@ -11,8 +11,8 @@ import { _get } from '../../common/index'
 const {height, width} = Dimensions.get('window');
 
 const defaultConfig = {
-    fadeInDuration: 500,
-    fadeOutDuration: 1000,
+    fadeInDuration: 200,
+    fadeOutDuration: 200,
     opacity: 1,
 }
 

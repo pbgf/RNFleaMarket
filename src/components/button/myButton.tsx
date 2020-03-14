@@ -12,8 +12,8 @@ export interface Props {
     onPress: () => void,
     isRadius: boolean,
     width: number | string,
-    height: number | string,
-    color: string
+    height?: number | string,
+    color?: string
 }
 
 export default function myButton (props: Props) {

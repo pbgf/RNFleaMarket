@@ -21,7 +21,7 @@ export interface Props {
 }
 
 export default function communicationItem(props:Props) {
-    const { user, text, img, publishTime, Id, title, like_cnt, comment_cnt } = props.item //只能发一张图片
+    const { user, text, img, publish_time, Id, title, like_cnt, comment_cnt } = props.item //只能发一张图片
     const { navigation, userInfo } = props
     const { icon, user_name } = user
     const { width, height, url } = img
@@ -61,7 +61,7 @@ export default function communicationItem(props:Props) {
                 </View>
                 <View style={styles.column}>
                     <Text>{user_name}</Text>
-                    <Text>{publishTime}</Text>
+                    <Text>{publish_time}</Text>
                 </View>
             </View>
             <View style={styles.content}>

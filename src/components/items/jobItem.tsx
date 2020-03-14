@@ -5,11 +5,11 @@ import {
     StyleSheet,
     TouchableOpacity
 } from 'react-native'
-import { Item } from '../screen/jobsScreen'
+import { JobState } from '../../store/reducers/job'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
 
 export interface Props{
-    item:Item,
+    item:JobState,
     navigation:NavigationScreenProp<NavigationState>
 }
 

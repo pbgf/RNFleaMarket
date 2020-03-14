@@ -23,28 +23,28 @@ export default (props: Props) => {
     const { saveUser } = props
     const toast_ref = global.toast_ref
     const login = () => {
-        // props.navigation.navigate('Tab')
+        props.navigation.navigate('Tab')
         // console.profile('logining')
-        if(telePhone_val&&passwd_val){
-            const user = {
-                telePhone_val,
-                passwd_val: md5(passwd_val)
-            }
-            api.user.login(user)
-            .then(res => res.json())
-            .then(response => {
-                if(response.status == 200) {
-                    toast_ref.current.show(response.msg,() => {
-                        saveUser(response.result[0])
-                        props.navigation.navigate('Tab')
-                    })
-                }else{
-                    toast_ref.current.show(response.msg)
-                }
-            })
-        }else{
-            toast_ref.current.show('请填写账号和密码')
-        }
+        // if(telePhone_val&&passwd_val){
+        //     const user = {
+        //         telePhone_val,
+        //         passwd_val: md5(passwd_val)
+        //     }
+        //     api.user.login(user)
+        //     .then(res => res.json())
+        //     .then(response => {
+        //         if(response.status == 200) {
+        //             toast_ref.current.show(response.msg,() => {
+        //                 saveUser(response.result[0])
+        //                 props.navigation.navigate('Tab')
+        //             })
+        //         }else{
+        //             toast_ref.current.show(response.msg)
+        //         }
+        //     })
+        // }else{
+        //     toast_ref.current.show('请填写账号和密码')
+        // }
     }
     return (
         <View style={styles.container}>

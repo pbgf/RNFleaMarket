@@ -22,6 +22,18 @@ export const isnullOrUndefined = (target:any) => {
   return target === null || target === undefined
 }
 
+export const autoAlert = (succCb:() => string, failCb:() => string) => {
+  let msg:string
+  const toast_ref = global.toast_ref 
+  return new Promise((resolve, reject) => {
+    if(msg=failCb()){
+      toast_ref.current.show(msg, () => reject())
+    }else{
+      toast_ref.current.show(succCb(), () => resolve())
+    }
+  })
+}
+
 // export const $global = {
 //   toast_ref: '',
 //   setRef: function (ref:any) {

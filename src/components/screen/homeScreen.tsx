@@ -1,75 +1,113 @@
 import React, { useState, useEffect, Component }  from 'react';
+import api from '../../api/'
 import { 
     Text, 
     View, 
     Button,
-    FlatList
+    FlatList,
+    ScrollView,
+    StyleSheet,
+    RefreshControl,
+    ActivityIndicator
  } from 'react-native';
 import CommunicationItemContainer from '../../containers/CommunicationItemContainer'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
+import { ChatBeautify } from '../../store/reducers/chat'
 
 export interface Props{
     navigation:NavigationScreenProp<NavigationState>
 }
 
 export default function HomeScreen (props: Props) {
-    const [lists,updateLists] = useState([
-        {
-            user:{
-                icon:'',
-                user_name:'hyq'
-            },
-            text:'测试文本，哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈测试文本，哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-            img:{
-                url:'http://pic1.win4000.com/wallpaper/2019-12-03/5de5ee3fd5fc2.jpg',
-                width:'1920',
-                height:'1200'
-            },
-            publishTime:'2020-01-26',
-            title:'test',
-            key:'1',
-            like_cnt:1000,
-            comment_cnt:1,
-            Id:'f26a93834d86445eb323e91cae42f309'
-        },
-        {
-            user:{
-                icon:'',
-                user_name:'test'
-            },
-            text:'用于显示多种不同类型图片的 React 组件，包括网络图片、静态资源、临时的本地图片、以及本地磁盘上的图片（如相册）等。',
-            img:{
-                url:'http://attach.bbs.miui.com/forum/201202/18/090658g5shfjyixlhwjyyi.jpg',
-                width:'1920',
-                height:'1200'
-            },
-            publishTime:'2020-01-26',
-            key:'2',
-            like_cnt:1000,
-            comment_cnt:1
-        },
-        {
-            user:{
-                icon:'',
-                user_name:'hhhh'
-            },
-            text:'React Native可以通过Image组件显示图片。既可以加载网络图片,也可以加载本地资源图片。接下来，我们介绍React Native加载图片的几种方式',
-            img:{
-                url:'http://pic1.win4000.com/wallpaper/2019-11-27/5dde26e45b469.jpg',
-                width:'1920',
-                height:'1200'
-            },
-            publishTime:'2020-01-26',
-            key:'3',
-            like_cnt:1000,
-            comment_cnt:1
-        },
-    ]) 
+    const [lists,updateLists] = useState([]) 
+    //const [refreshing, setRefreshing] = useState(false)
+    const [state,setState] = useState({
+        isLoad:false,
+        refreshing: false,
+        pageNumber: 1,
+        pageLimit: 2,
+        pageCount: 2,
+        animating: true,
+        nomore: false,
+    })
+    const getList = (limit?:number) => (
+        api.chat.queryParams(
+            {
+                limit: limit || state.pageCount,
+                offset: 0
+            }
+        )
+        .then(res => res.json())
+        .then(response => {
+            updateLists(response.result)
+            return response
+        })
+    )
+    const _onRefresh = () => {
+        console.log('Refreshing')
+        setState(Object.assign({},state,{
+            refreshing: true,
+        }))
+        getList().then(() => {
+            setState(Object.assign({},state,{
+                refreshing: false,
+            }))
+        })
+    }
+    const _onEndReached = () => {
+        if(state.isLoad){
+            console.log('_onEndReached')
+            setState(Object.assign({},state,{
+                pageNumber: state.pageNumber+1,
+                pageCount: state.pageCount + state.pageLimit
+            }))
+            getList(state.pageCount + state.pageLimit).then((response) => {
+                if(response.result.length === lists.length){
+                    setState(Object.assign({},state,{
+                        nomore: true
+                    }))
+                }
+            })
+        }
+    } 
+    const ListFooterComponent = () => {
+        return (
+          <View style={styles.bottomfoot}>
+            {
+                state.nomore ? (
+                <Text style={styles.footText}>- 我是有底线的 -</Text>
+                ) : (
+                    <View style={styles.activeLoad}>
+                    <ActivityIndicator size="small" animating={state.animating} />
+                    <Text style={[styles.footText, styles.ml]}>加载更多...</Text>
+                    </View>
+                )
+            }
+          </View>
+        );
+      };
+    useEffect(() => {
+        getList().then(() => {
+            setState(Object.assign({},state,{
+                isLoad:true
+            }))
+        })
+    },[])
     return (
-    <View style={{ flex: 1, width:'100%', justifyContent: 'center', alignItems: 'center' }}>
+    <View style={{flex: 1, width:'100%', height:'100%',justifyContent: 'center', alignItems: 'center'}}>
         <FlatList
-            style={{width:'100%'}}
+            style={{width:'100%',height:'100%'}}
             data={lists}
+            keyExtractor={(item:ChatBeautify) => item.Id}
+            onEndReached={_onEndReached}
+            onEndReachedThreshold={0.1}
+            ListFooterComponent={ListFooterComponent}
+            refreshControl={
+                <RefreshControl
+                    refreshing={state.refreshing}
+                    onRefresh={_onRefresh}
+                />
+            }
             renderItem={ ({item}) => 
                 <CommunicationItemContainer
                     item={item}
@@ -80,3 +118,26 @@ export default function HomeScreen (props: Props) {
     </View>
     );
 }
+
+const styles = StyleSheet.create({
+    bottomfoot: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: 10,
+    },
+    footText: {
+      marginTop: 5,
+      fontSize: 12,
+      color: '#999999',
+    },
+  
+    activeLoad: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    ml: {
+      marginLeft: 10,
+    },
+  });

@@ -13,6 +13,8 @@ import api from '../../api'
 import { width as screenWidth } from '../../config/device'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
 import { UserState } from '../../store/reducers/user'
+import { ChatState } from '../../store/reducers/chat'
+import { _get } from '../../common/'
 
 export interface Props {
     navigation: NavigationScreenProp<NavigationState>,
@@ -43,7 +45,7 @@ export default function (props: Props) {
         .then(response => {
             setLists(response.result)
         })
-        api.chat.query(`Id=${communicationId}`)
+        api.chat.query('Id', communicationId)
         .then(res => res.json())
         .then(response => {
             let result = response.result[0]
@@ -68,7 +70,7 @@ export default function (props: Props) {
                     style={{width:'100%'}}
                     data={lists}
                     renderItem={ ({item}) => <CommentItem item={item}/>}
-                    keyExtractor={ (item) => item.Id}
+                    keyExtractor={ (item:ChatState) => _get(item, 'Id')}
                     />
                 </View>
             </ScrollView>

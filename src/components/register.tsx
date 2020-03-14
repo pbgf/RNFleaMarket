@@ -12,7 +12,7 @@ import MyButton from './button/myButton'
 import api from '../api/index'
 import Toast from '../components/base/Toast'
 import ImagePicker from 'react-native-image-crop-picker'
-import { guid } from '../common'
+import { guid, autoAlert } from '../common'
 import md5 from 'js-md5'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
 import { Image as ImageType } from 'react-native-image-crop-picker'
@@ -61,11 +61,23 @@ const Register = (props: Props) => {
             api.user.register(formData)
             .then(res => res.json())
             .then(response => {
-                if(response.status == 200){
-                    toast_ref.current.show('success', () => {
-                        props.navigation.navigate('Login')
-                    })
-                }
+                autoAlert(() => {
+                    return '注册成功'
+                }, () => {
+                    if(response.status != 200){
+                        return response.msg
+                    }
+                }).then(() => {
+                    props.navigation.navigate('LoginContainer')
+                })
+                // if(response.status == 200){
+                //     toast_ref.current.show('注册成功', () => {
+                //         console.log('jump login')
+                //         props.navigation.navigate('LoginContainer')
+                //     })
+                // }else{
+                //     toast_ref.current.show(response.msg)
+                // }
             }).catch(err=>{
                 console.log(err)
             })

@@ -5,7 +5,7 @@ import {
 } from 'react-native'
 import RootNat from './rootNav'
 import { height } from './config/device'
-import Toast from './components/base/Toast'
+import Toast from './components/base/toast'
 
 export default function App () {
   const toast_ref = useRef()

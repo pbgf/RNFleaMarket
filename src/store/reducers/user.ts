@@ -11,7 +11,7 @@ const initState = {
 }
 
 export interface UserState {
-    Id?:string,
+    Id:string,
     user_name?:string,
     pass_word?:string,
     telephone?:string,
