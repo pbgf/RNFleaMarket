@@ -9,9 +9,9 @@ import {
 export interface Props {
     title: string,
     backgroundColor: string,
-    onPress: () => void,
-    isRadius: boolean,
-    width: number | string,
+    onPress?: () => void,
+    isRadius?: boolean,
+    width?: number | string,
     height?: number | string,
     color?: string
 }
@@ -49,7 +49,7 @@ export default function myButton (props: Props) {
                 activeOpacity={0.7}
                 onPress={onPress}
             >
-                <Text style={color?color:{color:'white'}}> {title} </Text>
+                <Text style={color?{color}:{color:'white'}}> {title} </Text>
             </TouchableOpacity>
         </View>
     )

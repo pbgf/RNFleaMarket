@@ -15,30 +15,9 @@ import JobDetail from './components/detail/jobDetail'
 import MyButton from './components/button/myButton'
 import { NavigationNavigatorProps, NavigationState } from 'react-navigation'
 import { _get } from './common/index'
+import SearchInput from './containers/SearchInputContainer'
 
 const screenWidth = Math.round(Dimensions.get('window').width);
-
-function SearchInput() {
-    return (
-      <View style={{width:screenWidth,height:'100%',flexDirection:'row', justifyContent:'center',alignItems:'center'}}>
-        <TextInput
-        placeholder='搜索' 
-        clearButtonMode='while-editing'
-        underlineColorAndroid='transparent'
-        style={styles.input}
-      />
-      <MyButton 
-        backgroundColor="#fff" 
-        title="搜索" 
-        //isRadius={true}
-        color={'black'}
-        //onPress={login}
-        //width={'20%'}
-        height={30}
-        />
-      </View>
-    );
-}
 
 const defaultNavigationOptions = ({navigation}:NavigationNavigatorProps<{},NavigationState>):any=> {
   let title:any = '校园跳蚤市场'

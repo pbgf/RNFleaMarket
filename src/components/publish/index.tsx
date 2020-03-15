@@ -23,7 +23,6 @@ export default function Publish(props: Props)  {
 	]
 
 	const _renderItem = (data) => {
-		console.log(data)
 		return (
 			<TouchableOpacity 
 				style={styles.item} 

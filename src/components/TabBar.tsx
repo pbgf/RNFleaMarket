@@ -17,7 +17,6 @@ export interface Props{
 }
 
 export default function TabBar (props: Props) { 
-    console.log(props)
     const { navigation } = props
     const { routes } = navigation.state
     const renderItem = (route: NavigationState, index: number) => {

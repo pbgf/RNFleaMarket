@@ -18,8 +18,12 @@ export interface Props{
 
 export default function (props:Props) {
     const { navigation } = props
-    const [data,setData] = useState<JobState>({})
-    const [publish_user,setUser] = useState<UserState>({})
+    const [data,setData] = useState<JobState>({
+        Id: ''
+    })
+    const [publish_user,setUser] = useState<UserState>({
+        Id: ''
+    })
     useEffect(()=>{
         let user_name:string
         new Promise((resolve) => {
@@ -52,12 +56,12 @@ export default function (props:Props) {
     const jumpToTel = () => {
         console.warn(publish_user)
         Linking.canOpenURL(`tel://${publish_user.telephone}`).then(supported => { // weixin://  alipay://
-        if (supported) {
-            Linking.openURL(`tel://${publish_user.telephone}`)
-        } else {
-            console.warn('error')
-        }
-    })
+            if (supported) {
+                Linking.openURL(`tel://${publish_user.telephone}`)
+            } else {
+                console.warn('error')
+            }
+        })
     }
     return (
         <View style={{width:'100%',height:'100%'}}>

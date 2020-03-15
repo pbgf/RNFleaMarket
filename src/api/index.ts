@@ -3,9 +3,19 @@
 //const base_path = '120.79.46.144:3000'
 export const base_path = 'http://192.168.228.193:3000/api'
 
-export interface Param{
+export interface Param {
     searchKey: string,
     searchVal: string | number
+}
+export interface Response {
+    result: Array<any>,
+    status: number,
+    msg: string
+}
+export interface pageParam {
+    limit: number,
+    offset: number,
+    query: string
 }
 // const $http = axios.create({
 //     baseURL: base_path
@@ -57,6 +67,13 @@ export default {
     job:{
         query: (searchKey?:string, searchVal?:string) => fetch(base_path + '/jobs?' + (searchKey?`${searchKey}=${searchVal}`:''),{
             method:'GET'
+        }),
+        queryParams: (params:Object) => fetch(base_path + '/jobs', { 
+            method: 'POST',
+            body: JSON.stringify(params),
+            headers: {
+                'Content-Type': 'application/json'
+            }
         })
     },
     home:{
