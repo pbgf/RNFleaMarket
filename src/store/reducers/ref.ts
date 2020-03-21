@@ -1,13 +1,16 @@
 import actionType from '../actions/actionType'
 import { SaveRefs } from '../actions/index'
 import { RefObject } from 'react'
+import { MyListViewApi } from '../../components/base/myListView'
 
 const initState = {
-    jobListRef: undefined
+    jobListRef: undefined,
+    messageListRef: undefined
 }
 
 export interface Refs {
-    jobListRef?: RefObject<any> | undefined
+    jobListRef?: RefObject<MyListViewApi> | undefined,
+    messageListRef?: RefObject<MyListViewApi> | undefined,
 }
 type Actions = SaveRefs
 const saveRefs =  (state: Refs = initState, action:Actions) => {

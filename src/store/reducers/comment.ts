@@ -1,5 +1,6 @@
 import actionType from '../actions/actionType'
 import { UpdateComments } from '../actions/index'
+import { User } from './chat'
 
 const initState = {
     Id:'',
@@ -10,7 +11,16 @@ const initState = {
     reply_user_name:'',
     publish_time:''
 }
-
+export interface CommentBeautify {
+    Id:string,
+    chat_id?:string,
+    content?:string,
+    like_cnt?:string,
+    publish_user_name?:string,
+    reply_user_name?:string,
+    publish_time?:string
+    user?:User
+}
 export interface CommentState {
     Id:string,
     chat_id?:string,

@@ -49,6 +49,7 @@ export default function (props:Props) {
             if (supported) {
                 Linking.openURL(`mqqapi://card/show_pslcard?src_type=internal&version=1&uin=${publish_user.qq}`)
             } else {
+                global.toast_ref.current.show('出现了错误，请检查是否下载或登录QQ')
                 console.warn('error')
             }
         })
@@ -59,6 +60,7 @@ export default function (props:Props) {
             if (supported) {
                 Linking.openURL(`tel://${publish_user.telephone}`)
             } else {
+                global.toast_ref.current.show('出现了错误')
                 console.warn('error')
             }
         })

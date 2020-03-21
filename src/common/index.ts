@@ -1,11 +1,12 @@
-export const guid = () => {
+import { base_path } from '../api/'
+export const guid = ():string => {
     return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
         return v.toString(16);
     })
 }
 
-export const _get = (obj:any,path:string,defaultVal:any = "") => {
+export function _get<T = ''>(obj:any, path:string, defaultVal:any = ''):T {
   let paths = path.split('.')
   let len = paths.length
   for(let i=0;i<len;i++){
@@ -17,12 +18,13 @@ export const _get = (obj:any,path:string,defaultVal:any = "") => {
   }
   return obj
 }
-  
-export const isnullOrUndefined = (target:any) => {
+
+
+export const isnullOrUndefined = (target:any):boolean => {
   return target === null || target === undefined
 }
 
-export const autoAlert = (succCb:() => string, failCb:() => string) => {
+export const autoAlert = (succCb:() => string, failCb:() => string):Promise<void> => {
   let msg:string
   const toast_ref = global.toast_ref 
   return new Promise((resolve, reject) => {
@@ -32,6 +34,13 @@ export const autoAlert = (succCb:() => string, failCb:() => string) => {
       toast_ref.current.show(succCb(), () => resolve())
     }
   })
+}
+
+export const getFile = (url:string):string => {
+  if(url.includes('http')){
+    return url
+  }
+  return `${base_path}/file/${url}`
 }
 
 // export const $global = {

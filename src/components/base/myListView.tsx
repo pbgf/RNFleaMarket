@@ -5,6 +5,7 @@ import {
     View, 
     Button,
     FlatList,
+    FlatListProps,
     ScrollView,
     StyleSheet,
     RefreshControl,
@@ -12,6 +13,9 @@ import {
     ListRenderItem
  } from 'react-native';
 
+export interface MyListViewApi {
+    refresh: (query: string) => void
+}
 export interface Props{
     renderItem: ListRenderItem<any>,
     fetch: (param: pageParam) => Promise<any>,
@@ -26,15 +30,16 @@ function myListView (props: Props, ref:React.Ref<any>) {
         isLoad:false,
         refreshing: false,
         pageNumber: 1,
-        pageLimit: 2,
-        pageCount: 2,
+        pageLimit: 5,
+        pageCount: 5,
         animating: true,
         nomore: false,
+        query: ''
     })
     const getList = (limit?:number, query?:string) => (
         fetch(
             {
-                query: query || '',
+                query: state.query || query  || '',
                 limit: limit || state.pageCount,
                 offset: 0
             }
@@ -55,9 +60,8 @@ function myListView (props: Props, ref:React.Ref<any>) {
             }))
         })
     }
-    const _onEndReached = () => {
-        if(state.isLoad){
-            console.log('_onEndReached')
+    const _onEndReached = (info:any) => {
+        if(state.isLoad && !state.nomore){
             setState(Object.assign({},state,{
                 pageNumber: state.pageNumber+1,
                 pageCount: state.pageCount + state.pageLimit
@@ -86,20 +90,20 @@ function myListView (props: Props, ref:React.Ref<any>) {
             }
           </View>
         );
-      };
+    };
     useEffect(() => {
         getList().then(() => {
             setState(Object.assign({},state,{
                 isLoad:true
             }))
-            console.log('onLoad')
             onLoad && onLoad()
         })
     },[])
     useImperativeHandle(ref, () => ({
         refresh: (query: string) => {
             setState(Object.assign({},state,{
-                isLoad:false
+                isLoad:false,
+                query
             }))
             getList(state.pageCount, query).then(() => {
                 setState(Object.assign({},state,{
@@ -109,7 +113,7 @@ function myListView (props: Props, ref:React.Ref<any>) {
         }
     }))
     return (
-    <View style={{flex: 1, width:'100%', height:'100%',justifyContent: 'center', alignItems: 'center'}}>
+    <View style={{flex: 1, width:'100%', height:'100%', justifyContent: 'center', alignItems: 'center'}}>
         {
             state.isLoad?
             <FlatList

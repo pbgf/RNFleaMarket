@@ -1,19 +1,19 @@
 import React, { useState } from 'react'
 import { StatusBar, TextInput, StyleSheet, Dimensions, View } from 'react-native'
 import MyButton from '../button/myButton'
+import { MyListViewApi } from './myListView'
+import { _get } from '../../common/'
 
 export interface props {
-    myRef: React.RefObject<any> | undefined
+    myRef: React.RefObject<MyListViewApi> | undefined
 }
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 export default function SearchInput(props:props) {
     const [query, OnChangeQuery] = useState('')
     const search = () => {
-        console.log('search')
-        console.log(props.myRef)
-        console.log(query)
-        props.myRef && props.myRef.current.refresh(query)
+      _get<Function>(props, 'myRef.current.refresh', () => {})(query)
+      //props.myRef && props.myRef.current && props.myRef.current.refresh(query)
     }
     return (
       <View style={{width:screenWidth,height:'100%',flexDirection:'row', justifyContent:'center',alignItems:'center'}}>

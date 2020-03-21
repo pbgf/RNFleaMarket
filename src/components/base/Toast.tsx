@@ -12,7 +12,7 @@ const {height, width} = Dimensions.get('window');
 
 const defaultConfig = {
     fadeInDuration: 200,
-    fadeOutDuration: 200,
+    fadeOutDuration: 1000,
     opacity: 1,
 }
 
@@ -53,7 +53,7 @@ function Toast (props:Props = defaultProps, ref:React.Ref<any>) {
                     text: state.text
                 })
                 callback && callback()
-                _get(animation, 'reset')()
+                _get<Function>(animation, 'reset', () => {})()
                 //animation.reset()
             })
         })

@@ -4,47 +4,51 @@ import {
     Text,
     TextInput,
     Button,
-    StyleSheet
+    StyleSheet,
+    BackHandler
 } from 'react-native'
 import MyButton from './button/myButton'
 import api from '../api/index'
 import Toast from '../components/base/Toast'
 import md5 from 'js-md5'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
+import { UserState } from '../store/reducers/user'
 
 export interface Props {
     saveUser: Function,
-    navigation: NavigationScreenProp<NavigationState>
+    navigation: NavigationScreenProp<NavigationState>,
+    user: UserState
 }
 
 export default (props: Props) => {
-    const [telePhone_val,OnChangeTelePhone] = useState('')
-    const [passwd_val, onChangePasswd] = useState('')
-    const { saveUser } = props
+    const [telePhone_val,OnChangeTelePhone] = useState('13378240823')
+    const [passwd_val, onChangePasswd] = useState('123456')
+    const { saveUser, user, navigation } = props
     const toast_ref = global.toast_ref
+    if(user.user_name){
+        navigation.navigate('Tab')
+    }
     const login = () => {
-        props.navigation.navigate('Tab')
-        // console.profile('logining')
-        // if(telePhone_val&&passwd_val){
-        //     const user = {
-        //         telePhone_val,
-        //         passwd_val: md5(passwd_val)
-        //     }
-        //     api.user.login(user)
-        //     .then(res => res.json())
-        //     .then(response => {
-        //         if(response.status == 200) {
-        //             toast_ref.current.show(response.msg,() => {
-        //                 saveUser(response.result[0])
-        //                 props.navigation.navigate('Tab')
-        //             })
-        //         }else{
-        //             toast_ref.current.show(response.msg)
-        //         }
-        //     })
-        // }else{
-        //     toast_ref.current.show('请填写账号和密码')
-        // }
+        //props.navigation.navigate('Tab')
+        if(telePhone_val&&passwd_val){
+            const user = {
+                telePhone_val,
+                passwd_val: md5(passwd_val)
+            }
+            api.user.login(user)
+            .then(res => res.json())
+            .then(response => {
+                if(response.status == 200) {
+                    saveUser(response.result[0])
+                    toast_ref.current.show(response.msg)
+                    navigation.navigate('Tab')
+                }else{
+                    toast_ref.current.show(response.msg)
+                }
+            })
+        }else{
+            toast_ref.current.show('请填写账号和密码')
+        }
     }
     return (
         <View style={styles.container}>

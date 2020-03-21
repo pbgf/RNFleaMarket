@@ -12,6 +12,7 @@ import { JobState } from '../../store/reducers/job'
 import api from '../../api/'
 import store from '../../store/'
 import { saveRefs } from '../../store/actions/'
+import { MyListViewApi } from '../base/myListView'
 export interface Item {
     Id:string,
     job_name:string,
@@ -24,7 +25,7 @@ export interface Item {
 export default function JobScreen (props:any) {
     // const [lists,setLists] = useState<Item[]>([])
     const [isLoad,setIsLoad] = useState(false)
-    const listRef = useRef<any>()
+    const listRef = useRef<MyListViewApi>(null)
     useEffect(()=>{
         store.dispatch(saveRefs({jobListRef:listRef}))
     },[])

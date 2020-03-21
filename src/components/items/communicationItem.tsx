@@ -13,6 +13,8 @@ import IconItem from '../base/iconItem'
 import Like from '../base/like'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
 import { UserState } from '../../store/reducers/user'
+import api, { base_path } from '../../api/'
+import { getFile } from '../../common/'
 
 export interface Props {
     item: any,
@@ -23,11 +25,13 @@ export interface Props {
 export default function communicationItem(props:Props) {
     const { user, text, img, publish_time, Id, title, like_cnt, comment_cnt } = props.item //只能发一张图片
     const { navigation, userInfo } = props
-    const { icon, user_name } = user
-    const { width, height, url } = img
     const [isLoad, setIsLoad] = useState(false)
-    const [commentCnt, setCommentCnt] = useState(comment_cnt)
+    let { icon, user_name } = user
+    let { width, height, url } = img
     const myHeight = Math.floor(screenWidth/width*height)
+    icon && (icon = `${base_path}/file/${icon}`)
+    //处理服务器端的图片路径
+    url = getFile(url)
     Image.getSize(url,() => {
         setIsLoad(true)
     },(err) => {
@@ -57,7 +61,7 @@ export default function communicationItem(props:Props) {
         <View style={styles.container}>
             <View style={styles.title}>
                 <View style={styles.userImg}>
-                    <Image style={styles.userIcon} source={{uri:'default_header'}}></Image>
+                    <Image style={styles.userIcon} source={{uri:(icon || 'default_header')}}></Image>
                 </View>
                 <View style={styles.column}>
                     <Text>{user_name}</Text>
@@ -73,16 +77,17 @@ export default function communicationItem(props:Props) {
                                 style={{width:'100%',height:myHeight}} 
                                 source={{uri:url}} />
                         </View>
-                    )) ||  <ActivityIndicator size="large" color="#e20000"/> : <View />
+                    )) ||  <View style={{height:myHeight,justifyContent:'center'}}><ActivityIndicator size="large" color="#e20000"/></View> : <View />
                 }
             </View>
             <View style={styles.bottomBar}>
-                
-                <Like likeCnt={like_cnt} />
-                
+                <Like 
+                    likeCnt={Number(like_cnt)} 
+                    minusCnt={(cnt) => api.chat.minusLikeCnt({like_cnt:cnt, Id, user_id:user.Id})}
+                    addCnt={(cnt) => api.chat.addLikeCnt({like_cnt:cnt, Id, user_id:user.Id})} />
                 <TouchableOpacity style={styles.iconContainer} activeOpacity={0.7} onPress={jumpToDetail}>
                     <Image style={styles.IconItem} source={{uri:'message'}} />
-                    <Text>{commentCnt}</Text>
+                    <Text>{comment_cnt}</Text>
                 </TouchableOpacity>
             </View>
         </View>

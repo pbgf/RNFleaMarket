@@ -38,13 +38,13 @@ const Register = (props: Props) => {
             width: 300,
             height: 300,
             multiple: false
-          }).then((image: ImageType | Array<ImageType>) => {
+        }).then((image: ImageType | Array<ImageType>) => {
             image = (image as ImageType)
             file = { uri:image.path, type:image.mime, size:image.size, name: guid() }
             formData.append('file', file)
             onChangeIsUpload(true)
             onChangeImgPath(image.path)
-          })
+        })
     }
     const isNumber = (value:any) => {
         return !isNaN(value/1)

@@ -1,14 +1,12 @@
 import React from 'react';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import { StatusBar, TextInput, StyleSheet, Dimensions, View } from 'react-native'
+import { StatusBar, TextInput, StyleSheet, Dimensions, View, BackHandler, ToastAndroid } from 'react-native'
 import Tab from './components/Tab'
 import LoginContainer from './containers/LoginContainer'
 import Register from './components/register'
-import Publish from './components/publish'
-import JobPublish from './components/publish/jobPublish'
-import PostPublish from './components/publish/postPublish'
-import SalePublish from './components/publish/salePublish'
+import Publish from './containers/PublishContainer'
+import UserInfo from './components/userInfo/userInfo'
 import EditInput from './components/base/editInput'
 import CommunicationDetailContainer from './containers/CommunicationDetailContainer'
 import JobDetail from './components/detail/jobDetail'
@@ -17,24 +15,46 @@ import { NavigationNavigatorProps, NavigationState } from 'react-navigation'
 import { _get } from './common/index'
 import SearchInput from './containers/SearchInputContainer'
 
-const screenWidth = Math.round(Dimensions.get('window').width);
+const screenWidth = Math.round(Dimensions.get('window').width)
 
 const defaultNavigationOptions = ({navigation}:NavigationNavigatorProps<{},NavigationState>):any=> {
   let title:any = '校园跳蚤市场'
-  switch(_get(navigation, 'state.index')){
+  switch(_get<number>(navigation, 'state.index')){
     case 1:
+      title = () => <SearchInput />
+      break
     case 3:
       title = () => <SearchInput />
       break
     case 4:
       title = '我的'
   }
+  let cnt = 1
+  const handleBackPress = () => {
+    if(navigation?.state.routeName == 'Tab'){
+      if(cnt == 2){
+        BackHandler.exitApp()
+        cnt = 1
+      }else{
+        cnt++
+        //global.toast_ref.current.show('再点一次返回退出程序')
+        ToastAndroid.show('再按一次退出程序', ToastAndroid.SHORT)
+        setTimeout(() => {
+          cnt=1
+        },1000)
+      }
+    }else{
+      navigation.goBack()
+    }
+    return true
+  }
+  BackHandler.addEventListener('hardwareBackPress', handleBackPress)
   return {
       headerStyle: { 
           borderBottomWidth: 0,
           elevation: 0,
           backgroundColor: '#ff2d55',
-          height: 44 + _get(StatusBar, 'currentHeight', 0),
+          height: 44 + _get<number>(StatusBar, 'currentHeight', 0),
       },
       headerTitleAlign: 'center',
       headerTintColor: '#fff',
@@ -45,14 +65,12 @@ const defaultNavigationOptions = ({navigation}:NavigationNavigatorProps<{},Navig
 const Main = createStackNavigator(
     {
         Tab,
-        JobPublish,
-        PostPublish,
-        SalePublish,
+        UserInfo,
         EditInput,
         CommunicationDetailContainer:{
           screen:CommunicationDetailContainer,
           navigationOptions: ({ navigation }:NavigationNavigatorProps<{},NavigationState>) => ({
-            headerTitle: _get(navigation,'state.params.title'),
+            headerTitle: _get<string>(navigation,'state.params.title'),
           }),
         },
         JobDetail:{

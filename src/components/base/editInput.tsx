@@ -9,6 +9,7 @@ import {
 } from 'react-native'
 import ImagePicker, { Image as ImageType } from 'react-native-image-crop-picker'
 import { NavigationScreenProp } from 'react-navigation'
+import { isnullOrUndefined, _get } from '../../common/'
 
 interface ImgItemProps{
     source:string,
@@ -30,56 +31,81 @@ function ImgItem (props:ImgItemProps) {
         </View>
     )
 }
-
-export interface Props{
-    navigation:NavigationScreenProp<any>
+export interface Field{
+    placeholder:string,
+    key:string
 }
-
+export interface Props{
+    navigation:NavigationScreenProp<any>,
+}
+/**
+ * 
+ * @param props fields:Array<field>
+ * data:object
+ * field
+ */
 export default function (props:Props) {
     const [isChosed,setIsChosed] = useState(false)
-    const [path,setPath] = useState('')
+    const [img,setImg] = useState<ImageType | null>(null)
     const [title,setTitle] = useState('')
     const [content,setContent] = useState('')
     const toast_ref = global.toast_ref
     const { navigation } = props
-    const hasTitle = navigation.getParam('hasTitle')
-    const publish = navigation.getParam('publish')
+    const fields:Array<Field> = navigation.getParam('fields')
+    const [state,setState] = useState(navigation.getParam('initdata'))
+    const publish:(content:string, state:any, img:ImageType|null, navigation:NavigationScreenProp<any>) => void = navigation.getParam('publish')
     const choseImg = () => {
         ImagePicker.openPicker({}).then((value:ImageType | ImageType[]) => {
             value = value as ImageType
-            setPath(value.path)
+            setImg(value)
             setIsChosed(true)
         })
     }
     const close = () => {
-        setPath('')
+        setImg(null)
         setIsChosed(false)
     }
     const _publish = () => {
-        if(hasTitle){
-            if(title&&content){
-                publish && publish()
-            }else{
-                toast_ref.current.show('请填写标题和内容')
+        let flag = 1
+        Object.keys(state).forEach((key) => {
+            if(isnullOrUndefined(state[key])){
+                toast_ref.current.show('请填写内容完整')
+                flag = 0
             }
-        }else if(content){
-            publish && publish()
-        }else{
-            toast_ref.current.show('请填写内容')
+        })
+        if(flag){
+            publish(content, state, img, navigation)
         }
+        // if(hasTitle){
+        //     if(title&&content){
+        //         publish && publish()
+        //     }else{
+        //         toast_ref.current.show('请填写标题和内容')
+        //     }
+        // }else if(content){
+        //     publish && publish()
+        // }else{
+        //     toast_ref.current.show('请填写内容')
+        // }
     }
     return (
         <View style={styles.container}>
-            <View style={styles.title}>
-                <TextInput 
-                style={[styles.titleInput,styles.textInput,hasTitle?null:styles.disabled]} 
-                underlineColorAndroid={'#b7b6b6'}
-                editable={hasTitle?true:false}
-                placeholder='这里添加标题'
-                maxLength={10}
-                value={title}
-                onChangeText={text => setTitle(text)} />
-            </View>
+            {
+                fields.map((item) => (
+                    <View style={styles.title} key={item.key}>
+                        <TextInput 
+                        style={[styles.titleInput,styles.textInput]} 
+                        underlineColorAndroid={'#b7b6b6'}
+                        // editable={hasTitle?true:false}
+                        placeholder={item.placeholder}
+                        maxLength={10}
+                        value={state[item.key]}
+                        onChangeText={text => setState(Object.assign({},state,{
+                            [item.key]: text
+                        }))} />
+                    </View>)
+                )
+            }
             <View style={styles.content}>
                 <TextInput 
                 style={[styles.contentInput,styles.textInput]} 
@@ -92,7 +118,7 @@ export default function (props:Props) {
             </View>
             <View style={styles.footer}>
                 <View style={styles.items}>
-                    {isChosed?<ImgItem source={path} onPress={close} />:null}
+                    {isChosed?<ImgItem source={_get(img, 'path', '')} onPress={close} />:null}
                 </View>
                 <View style={styles.toolBar}>
                     <TouchableOpacity style={styles.imgBtn} onPress={choseImg}>

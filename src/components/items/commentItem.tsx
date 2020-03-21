@@ -7,35 +7,42 @@ import {
     Image
 } from 'react-native';
 import Like from '../base/like'
-import { base_path } from '../../api/'
+import api, { base_path } from '../../api/'
+import { CommentBeautify } from '../../store/reducers/comment'
+import { UserState } from '../../store/reducers/user'
 
 export interface Props {
-    item: any
+    item: CommentBeautify,
+    onPressContent: () => void,
+    onPressUser: () => void
 }
 
 export default function CommentItem (props: Props) {
-    // const _onPressUser = (user) => {
-    //     const { onPressUser } = props;
-    //     onPressUser && onPressUser(user);
-    // }
-
+    const _onPressUser = () => {
+        const { onPressUser } = props;
+        onPressUser && onPressUser();
+    }
+    const { Id } = props.item
     const _renderHeader = () => {
         const { item } = props
         return (
             <View style={{flex:1,flexDirection: 'row',justifyContent:'space-between',alignItems: 'center'}}>
                 <TouchableOpacity 
-                    // onPress={() => this._onPressUser(item.u)}
+                    onPress={_onPressUser}
                     style={styles.itemHeader}>
                     <Image 
-                        source={{uri: base_path + '/file/' + item.user.icon}}
+                        source={{uri: base_path + '/file/' + item.user?.icon}}
                         style={styles.headerUser}
                         />
                     <View style={styles.headerName}>
-                        <Text style={{fontSize: 12, color: '#0073c1'}}>{item.user.user_name}</Text>
+                        <Text style={{fontSize: 12, color: '#0073c1'}}>{item.user?.user_name}</Text>
                         <Text style={{fontSize: 10, color: '#333'}}>{item.publish_time}</Text>
                     </View>
                 </TouchableOpacity>
-                <Like likeCnt={100} />
+                <Like 
+                minusCnt={(cnt) => api.comment.minusLikeCnt({like_cnt:cnt, Id, user_id: item.user?.Id})}
+                addCnt={(cnt) => api.comment.addLikeCnt({like_cnt:cnt, Id, user_id: item.user?.Id})} 
+                likeCnt={Number(item.like_cnt)} />
             </View>
         )
     }
@@ -44,7 +51,7 @@ export default function CommentItem (props: Props) {
         const { item } = props
         return (
             <TouchableOpacity 
-                onPress={() => _onPressContent(item)}
+                onPress={_onPressContent}
                 style={styles.itemContent}
                 >
                 <Text>{item.content}</Text>
@@ -52,9 +59,9 @@ export default function CommentItem (props: Props) {
         )
     }
 
-    const _onPressContent = (item: any) => {
+    const _onPressContent = () => {
         const { onPressContent } = props
-        onPressContent && onPressContent(item);
+        onPressContent && onPressContent();
     }
 
     return (

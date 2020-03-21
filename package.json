@@ -41,7 +41,6 @@
     "@react-native-community/eslint-config": "^0.0.5",
     "@types/jest": "^25.1.2",
     "@types/js-md5": "^0.4.2",
-    "@types/node": "^13.9.0",
     "@types/react": "^16.9.19",
     "@types/react-native": "^0.61.12",
     "@types/react-redux": "^7.1.7",

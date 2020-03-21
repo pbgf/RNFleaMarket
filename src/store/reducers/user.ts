@@ -1,13 +1,15 @@
 import actionType from '../actions/actionType'
 import { SaveUserInfo } from '../actions/index'
 
-const initState = {
+export const initState = {
     Id:'',
     user_name:'',
     pass_word:'',
     telephone:'',
     qq:'',
     icon:'',
+    sex:1,
+    like_cnt: 0
 }
 
 export interface UserState {
@@ -17,6 +19,9 @@ export interface UserState {
     telephone?:string,
     qq?:string,
     icon?:string,
+    like_cnt?:number,
+    sex?:number,
+    [key:string]:any
 }
 type Actions = SaveUserInfo
 const saveUser =  (state:UserState = initState, action:Actions) => {

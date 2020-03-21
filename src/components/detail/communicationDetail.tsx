@@ -13,8 +13,8 @@ import api from '../../api'
 import { width as screenWidth } from '../../config/device'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
 import { UserState } from '../../store/reducers/user'
-import { ChatState } from '../../store/reducers/chat'
-import { _get } from '../../common/'
+import { ChatBeautify, User } from '../../store/reducers/chat'
+import { _get, autoAlert, getFile } from '../../common/'
 
 export interface Props {
     navigation: NavigationScreenProp<NavigationState>,
@@ -29,17 +29,8 @@ export default function (props: Props) {
         text:'',
         img:''
     })
-    const publish = () => {
-        console.log('publish')
-    }
-    const jumpToEditPage = () => {
-        navigation.navigate('EditInput',{
-            publish:publish,
-            hasTitle:true
-        })
-    }
     const communicationId = navigation.getParam('communicationId')
-    useEffect(() => {
+    const getList = () => {
         api.comment.queryByCm(communicationId)
         .then(res => res.json())
         .then(response => {
@@ -53,10 +44,58 @@ export default function (props: Props) {
             let height = result.img.height
             myHeight = Math.floor(screenWidth/width*height)
             setContent({
-                text:result.text,
-                img:result.img.url
+                text: result.text,
+                img: getFile(result.img.url)
             })
         })
+    }
+    const jumpToUserPage = (user: UserState) => () => {
+        navigation.navigate('UserInfo', {
+            user,
+            isEditable: false
+        })
+    }
+    const jumpToEditPage = (replay_user?: User | undefined) => () => {
+        const initdata = {
+        }
+        const fields:Array<any> = []
+        const publish = (content:string, fieldData:any, img={}, _navigation:NavigationScreenProp<NavigationState>) => {
+            let comment = Object.assign(fieldData,{
+                publish_user: userInfo.Id,
+                publish_user_name: userInfo.user_name,
+                chat_id: navigation.getParam('communicationId'),
+                content
+            })
+            if(replay_user){
+                comment = Object.assign(fieldData,{
+                    reply_user_name: replay_user.user_name,
+                    reply_user: replay_user.Id
+                })
+            }
+            api.comment.add(comment)
+            .then(res => res.json())
+            .then(response => {
+                autoAlert(() => {
+                    return '发表了评论'
+                }, () => {
+                    if(response.status!=200){
+                        return response.msg
+                    }
+                })
+            }).then(() => {
+                _navigation.goBack()
+                getList()
+            })
+        }
+        navigation.navigate('EditInput',{
+            initdata,
+            fields,
+            publish,
+        })
+    }
+    
+    useEffect(() => {
+        getList()
     },[])
     return (
         <View style={styles.container}>
@@ -65,17 +104,21 @@ export default function (props: Props) {
                 <Text>{content.text}</Text>
             </View>
             <ScrollView style={styles.comments}>
-                <View style={{width:'100%'}}>
-                    <FlatList 
+                <FlatList 
                     style={{width:'100%'}}
                     data={lists}
-                    renderItem={ ({item}) => <CommentItem item={item}/>}
-                    keyExtractor={ (item:ChatState) => _get(item, 'Id')}
-                    />
-                </View>
+                    renderItem={ ({item}) => 
+                        <TouchableOpacity activeOpacity={0.7} onPress={jumpToEditPage(item.user)}>
+                            <CommentItem
+                                onPressUser={jumpToUserPage(userInfo)}
+                                onPressContent={jumpToEditPage(item.user)} item={item}/>
+                        </TouchableOpacity>
+                    }
+                    keyExtractor={(item:ChatBeautify) => _get(item, 'Id')}
+                />
             </ScrollView>
             <View style={styles.footer}>
-                <TouchableOpacity style={styles.input} activeOpacity={0.7} onPress={jumpToEditPage}>
+                <TouchableOpacity style={styles.input} activeOpacity={0.7} onPress={jumpToEditPage()}>
                     <Text>说点什么.....</Text>
                 </TouchableOpacity>
             </View>

@@ -1,7 +1,7 @@
 // import axios from 'react-native-axios'
 
 //const base_path = '120.79.46.144:3000'
-export const base_path = 'http://192.168.228.193:3000/api'
+export const base_path = 'http://192.168.1.6:3000/api'
 
 export interface Param {
     searchKey: string,
@@ -45,12 +45,40 @@ export default {
         }),
         query: (searchKey?:string, searchVal?:string) => fetch(base_path + '/users?' + (searchKey?`${searchKey}=${searchVal}`:''),{
             method:'GET'
-        })
+        }),
+        updateUser: (formData:FormData) => fetch(base_path + '/users/updateUser',{
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }),
     },
     comment:{
         queryByCm: (id:string) => fetch(base_path + '/comments/byCommunication/'+id,{
             method: 'GET'
-        }) //queryByCommunication
+        }), //queryByCommunication
+        add: (comment:object) => fetch(base_path + '/comments/publishComment',{
+            method:'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(comment)
+        }),
+        addLikeCnt: (entity:object) => fetch(base_path + '/comments/addLikeCnt',{
+            method:'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(entity)
+        }),
+        minusLikeCnt: (entity:object) => fetch(base_path + '/comments/minusLikeCnt',{
+            method:'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(entity)
+        }),
     },
     chat:{
         query: (searchKey?:string, searchVal?:string) => fetch(base_path + '/chats?' + (searchKey?`${searchKey}=${searchVal}`:''),{
@@ -62,7 +90,28 @@ export default {
             headers: {
                 'Content-Type': 'application/json'
             }
-        })
+        }),
+        add: (formData:FormData) => fetch(base_path + '/chats/publishChat',{
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }),
+        addLikeCnt: (entity:object) => fetch(base_path + '/comments/addLikeCnt',{
+            method:'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(entity)
+        }),
+        minusLikeCnt: (entity:object) => fetch(base_path + '/comments/minusLikeCnt',{
+            method:'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(entity)
+        }),
     },
     job:{
         query: (searchKey?:string, searchVal?:string) => fetch(base_path + '/jobs?' + (searchKey?`${searchKey}=${searchVal}`:''),{
@@ -74,9 +123,25 @@ export default {
             headers: {
                 'Content-Type': 'application/json'
             }
-        })
+        }),
+        add: (job:object) => fetch(base_path + '/jobs/publishJob',{
+            method:'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(job)
+        }),
     },
-    home:{
-
+    message:{
+        query: (searchKey?:string, searchVal?:string) => fetch(base_path + '/messages?' + (searchKey?`${searchKey}=${searchVal}`:''),{
+            method:'GET'
+        }),
+        queryParams: (params:Object) => fetch(base_path + '/messages', { 
+            method: 'POST',
+            body: JSON.stringify(params),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }),
     }
 }
