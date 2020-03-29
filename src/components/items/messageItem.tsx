@@ -8,6 +8,7 @@ import {
 import { UserState } from '../../store/reducers/user'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
 import { CommentState } from '../../store/reducers/comment'
+import { ChatState } from '../../store/reducers/chat'
 
 export interface MessageState {
     Id:string,
@@ -17,7 +18,8 @@ export interface MessageState {
     message_user_id?:string,
     chat_id:string,
     comment_id:string,
-    comment?:CommentState
+    comment?:CommentState,
+    chat?: ChatState
 }
 
 export interface Props{
@@ -27,21 +29,25 @@ export interface Props{
 
 export default function (props:Props) {
     const { navigation } = props
-    const { Id, publish_user_name, comment } = props.item
+    const { Id, publish_user_name, comment, chat_id, chat } = props.item
     const _onPress = () => {
-        navigation.navigate('JobDetail',{
-            jobId:Id
+        navigation.navigate('CommunicationDetailContainer',{
+            communicationId: chat_id,
+            title: chat.title
         })
     }
     return (
-        <View style={styles.container}>
-            <View style={styles.title}>
-                <Text style={{fontWeight: 'bold'}}>{publish_user_name}</Text>
-                <Text style={{fontSize: 14, color: '#505050'}}>回复了我的评论</Text>
+        <TouchableOpacity
+        onPress={_onPress}>
+            <View style={styles.container}>
+                <View style={styles.title}>
+                    <Text style={{fontWeight: 'bold'}}>{publish_user_name}</Text>
+                    <Text style={{fontSize: 14, color: '#505050'}}>回复了我的评论</Text>
+                </View>
+                <Text>{comment?.content}</Text>
+                <Text style={{fontSize: 10, color: '#333'}}>{comment?.publish_time}</Text>
             </View>
-            <Text>{comment?.content}</Text>
-            <Text style={{fontSize: 10, color: '#333'}}>{comment?.publish_time}</Text>
-        </View>
+        </TouchableOpacity>
     )
 }
 

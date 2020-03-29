@@ -1,5 +1,5 @@
 export interface ChatState {
-    Id?:string,
+    Id:string,
     title?:string,
     text?:string,
     img?:string,

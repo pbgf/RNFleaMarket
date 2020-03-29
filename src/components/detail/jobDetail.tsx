@@ -25,17 +25,17 @@ export default function (props:Props) {
         Id: ''
     })
     useEffect(()=>{
-        let user_name:string
+        let userId:string
         new Promise((resolve) => {
             api.job.query('id', navigation.getParam('jobId'))
             .then(res => res.json())
             .then(response => {
                 setData(response.result[0])
-                user_name = response.result[0].publish_user
+                userId = response.result[0].publish_user
                 resolve()
             })
         }).then(() => {
-            api.user.query('user_name', user_name)
+            api.user.query('Id', userId)
             .then(res => res.json())
             .then(response => {
                 setUser(response.result[0])

@@ -25,14 +25,11 @@ export default (props: Props) => {
     const getList = () => {
         ref?.current?.refresh(user.Id)
     }
-    const _renderItem = () => {
-
-    }
     useEffect(() => {
         getList()
     },[])
     return (
-        <MyListView ref={ref} renderItem={(item) => <MessageItem item={(item as any)} navigation={navigation} />} fetch={api.message.queryParams} keyExtractor={(item) => item.Id}  />
+        <MyListView ref={ref} renderItem={({item}) => <MessageItem item={(item as any)} navigation={navigation} />} fetch={api.message.queryParams} keyExtractor={(item) => item.Id}  />
     )
 }
 

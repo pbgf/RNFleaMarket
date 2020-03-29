@@ -16,7 +16,8 @@ export interface JobState {
     job_pay?: string,
     job_detail?: string,
     publish_time?: string,
-    publish_user?: string
+    publish_user?: string,
+    user_name?:string
 }
 
 type Actions = UpdateJobs

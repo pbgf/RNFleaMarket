@@ -30,7 +30,7 @@ function myListView (props: Props, ref:React.Ref<any>) {
         isLoad:false,
         refreshing: false,
         pageNumber: 1,
-        pageLimit: 5,
+        pageLimit: 10,
         pageCount: 5,
         animating: true,
         nomore: false,
@@ -46,8 +46,11 @@ function myListView (props: Props, ref:React.Ref<any>) {
         )
         .then(res => res.json())
         .then(response => {
+            console.log(response)
             updateLists(response.result)
             return response
+        }).catch((err) => {
+            console.log(err)
         })
     )
     const _onRefresh = () => {
@@ -92,11 +95,14 @@ function myListView (props: Props, ref:React.Ref<any>) {
         );
     };
     useEffect(() => {
+        debugger
         getList().then(() => {
             setState(Object.assign({},state,{
                 isLoad:true
             }))
             onLoad && onLoad()
+        }).catch(err => {
+            console.log(err)
         })
     },[])
     useImperativeHandle(ref, () => ({
@@ -105,9 +111,11 @@ function myListView (props: Props, ref:React.Ref<any>) {
                 isLoad:false,
                 query
             }))
+            debugger
             getList(state.pageCount, query).then(() => {
                 setState(Object.assign({},state,{
-                    isLoad:true
+                    isLoad:true,
+                    query
                 }))
             })
         }

@@ -79,6 +79,13 @@ export default {
             },
             body: JSON.stringify(entity)
         }),
+        queryByUserId: (params:Object) => fetch(base_path + '/comments/byUserId', { 
+            method: 'POST',
+            body: JSON.stringify(params),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }),
     },
     chat:{
         query: (searchKey?:string, searchVal?:string) => fetch(base_path + '/chats?' + (searchKey?`${searchKey}=${searchVal}`:''),{
@@ -98,20 +105,34 @@ export default {
                 'Content-Type': 'multipart/form-data'
             }
         }),
-        addLikeCnt: (entity:object) => fetch(base_path + '/comments/addLikeCnt',{
+        addLikeCnt: (entity:object) => fetch(base_path + '/chats/addLikeCnt',{
             method:'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(entity)
         }),
-        minusLikeCnt: (entity:object) => fetch(base_path + '/comments/minusLikeCnt',{
+        minusLikeCnt: (entity:object) => fetch(base_path + '/chats/minusLikeCnt',{
             method:'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(entity)
         }),
+        queryByUserId: (params:Object) => fetch(base_path + '/chats/byUserId', { 
+            method: 'POST',
+            body: JSON.stringify(params),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }),
+        dele: (Id:string) => fetch(base_path + '/chats/', {
+            method: 'Delete',
+            body: JSON.stringify({Id}),
+            headers: {
+              'Content-Type': 'application/json',
+            }
+        })
     },
     job:{
         query: (searchKey?:string, searchVal?:string) => fetch(base_path + '/jobs?' + (searchKey?`${searchKey}=${searchVal}`:''),{
@@ -131,6 +152,53 @@ export default {
             },
             body: JSON.stringify(job)
         }),
+        queryByUserId: (params:Object) => fetch(base_path + '/jobs/byUserId', { 
+            method: 'POST',
+            body: JSON.stringify(params),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }),
+        dele: (Id:string) => fetch(base_path + '/jobs/', {
+            method: 'Delete',
+            body: JSON.stringify({Id}),
+            headers: {
+              'Content-Type': 'application/json',
+            }
+        })
+    },
+    secondHand:{
+        query: (searchKey?:string, searchVal?:string) => fetch(base_path + '/secondHand?' + (searchKey?`${searchKey}=${searchVal}`:''),{
+            method:'GET'
+        }),
+        queryParams: (params:Object) => fetch(base_path + '/secondHand', { 
+            method: 'POST',
+            body: JSON.stringify(params),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }),
+        add: (entity:object) => fetch(base_path + '/secondHand/publishSecondHand',{
+            method:'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(entity)
+        }),
+        queryByUserId: (params:Object) => fetch(base_path + '/secondHand/byUserId', { 
+            method: 'POST',
+            body: JSON.stringify(params),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }),
+        dele: (Id:string) => fetch(base_path + '/secondHand/', {
+            method: 'Delete',
+            body: JSON.stringify({Id}),
+            headers: {
+              'Content-Type': 'application/json',
+            }
+        })
     },
     message:{
         query: (searchKey?:string, searchVal?:string) => fetch(base_path + '/messages?' + (searchKey?`${searchKey}=${searchVal}`:''),{

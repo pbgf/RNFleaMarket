@@ -54,7 +54,7 @@ export default function Publish(props: Props)  {
 							return response.msg
 						}
 					}).then(() => {
-						navigation.goBack()
+						(navigation as any).pop()
 					})
 				})
 			}
@@ -78,7 +78,7 @@ export default function Publish(props: Props)  {
 			],
 			publish: (content:string, fieldData:any) => {
 				let job = Object.assign(fieldData,{
-					publish_user: user.user_name,
+					publish_user: user.Id,
 					job_detail: content
 				})
 				api.job.add(job)
@@ -91,12 +91,34 @@ export default function Publish(props: Props)  {
 							return response.msg
 						}
 					}).then(() => {
-						navigation.navigate('Publish')
+						(navigation as any).pop()
 					})
 				})
 			}
 		},
-		{key: 'publish_second', title: '二手转让', url:'SalePublish'},
+		{
+			key: 'publish_second', 
+			title: '二手转让', 
+			publish: (content:string, fieldData:any) => {
+				let secondHand = Object.assign(fieldData,{
+					publish_user: user.Id,
+					detail: content
+				})
+				api.secondHand.add(secondHand)
+				.then(res => res.json())
+				.then(response => {
+					autoAlert(() => {
+						return '发布成功'
+					}, () => {
+						if(response.status != 200){
+							return response.msg
+						}
+					}).then(() => {
+						(navigation as any).pop()
+					})
+				})
+			}
+		},
 	]
 	const jumpToEditPage = ({initdata, fields, publish}:any) => {
         navigation.navigate('EditInput',{

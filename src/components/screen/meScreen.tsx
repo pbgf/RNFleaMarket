@@ -20,33 +20,33 @@ export interface Props {
 
 const list = [
   {
-    icon: '',
+    icon: 'mymessage',
     title: '消息',
-    url: '',
+    url: 'Message',
     key: 1
   },
   {
-    icon: '',
+    icon: 'chat',
     title: '帖子',
-    url: '',
+    url: 'UserChat',
     key: 2
   },
   {
-    icon: '',
+    icon: 'comment',
     title: '评论',
-    url: '',
+    url: 'UserComment',
     key: 3
   },
   {
-    icon: '',
+    icon: 'sale',
     title: '转让',
-    url: '',
+    url: 'UserSecond',
     key: 4
   },
   {
-    icon: '',
+    icon: 'job',
     title: '发布的工作',
-    url: '',
+    url: 'UserPublish',
     key: 5
   },
 ]
@@ -85,10 +85,10 @@ function meScreen(props: Props) {
           list.map(item => (
             <TouchableOpacity onPress={() => {navigation.navigate(item.url)}} key={item.key} activeOpacity={0.7} style={styles.item}>
               <View style={styles.icon}>
-                <Image source={{uri: item.url}} />
-                <Text style={{width:100, marginLeft:10}}>{item.title}</Text>
+                <Image style={{width:30,height:30}} source={{uri: item.icon}} />
+                <Text style={{fontSize: 15,width:100}}>{item.title}</Text>
               </View>
-              <Text style={{marginRight:10,color:'rgba(0, 0, 0, 0.3)'}}> > </Text>
+              <Text style={{fontSize: 25,marginRight:10,color:'rgba(0, 0, 0, 0.3)'}}> > </Text>
             </TouchableOpacity>
           ))
         }
@@ -136,12 +136,14 @@ const styles = StyleSheet.create({
   item:{
     flexDirection: 'row',
     height: '10%',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    alignItems: 'center'
   },
   icon:{
     width: '10%',
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    alignItems: 'center'
   }
 })
 

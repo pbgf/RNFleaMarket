@@ -10,29 +10,46 @@ import { NavigationScreenProp, NavigationState } from 'react-navigation'
 
 export interface Props{
     item:JobState,
-    navigation:NavigationScreenProp<NavigationState>
+    navigation:NavigationScreenProp<NavigationState>,
+    controlable?: boolean,
+    dele?: (Id:string) => void
 }
 
 export default function (props:Props) {
-    const { navigation } = props
-    const { Id, job_name, job_pay, publish_user, publish_time } = props.item
+    const { navigation, controlable, dele } = props
+    const { Id, job_name, job_pay, publish_user, user_name, publish_time } = props.item
     const _onPress = () => {
         navigation.navigate('JobDetail',{
             jobId:Id
         })
     }
     return (
-        <TouchableOpacity onPress={_onPress}>
+        <TouchableOpacity style={styles.row} onPress={_onPress}>
             <View style={styles.container}>
                 <Text style={styles.name}>{job_name}</Text>
                 <Text style={styles.pay}>{job_pay}</Text>
-                <Text style={styles.userName}>发布者：{publish_user}  发布时间：{publish_time}</Text>
+                <Text style={styles.userName}>发布者：{user_name}  发布时间：{publish_time}</Text>
+                {
+                    controlable&&dele?(
+                        <TouchableOpacity onPress={dele.bind(null,Id)} style={{position:'absolute', right: 10, top: '50%'}}>
+                            <Text>删除</Text>
+                        </TouchableOpacity>
+                    ):null
+                }
             </View>
         </TouchableOpacity>
     )
 }
 
 const styles = StyleSheet.create({
+    row: {
+        flexDirection: 'row'
+    },
+    deleBtn: {
+        position:'absolute', 
+        right: 10, 
+        top: '50%'
+    },
     container:{
         display:'flex',
         width:'100%',

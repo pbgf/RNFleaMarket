@@ -1,22 +1,40 @@
-import React, { useState, useEffect, Component }  from 'react';
-import { Text, View, Button } from 'react-native';
+import React, { useState, useEffect, Component, useRef }  from 'react';
+import { 
+    Text, 
+    View, 
+    FlatList,
+    ActivityIndicator,
+    ListRenderItemInfo
+} from 'react-native';
+import SecondHandItem from '../items/secondHandItem'
+import MyListView from '../base/myListView'
+import { JobState } from '../../store/reducers/job'
+import api from '../../api/'
+import store from '../../store/'
+import { saveRefs } from '../../store/actions/'
+import { MyListViewApi } from '../base/myListView'
 
-export interface Props {
+export default function secondHandSaleScreen (props:any) {
+    // const [lists,setLists] = useState<Item[]>([])
+    const [isLoad,setIsLoad] = useState(false)
+    const listRef = useRef<MyListViewApi>(null)
+    useEffect(()=>{
+        store.dispatch(saveRefs({jobListRef:listRef}))
+    },[])
+    const _renderItem = ({item}:ListRenderItemInfo<any>) => 
+            <SecondHandItem 
+            item={item}
+            navigation={props.navigation}  />
 
-}
-
-export default function meScreen() {
-  const [count, setCount] = useState(0);
-
-  // Similar to componentDidMount and componentDidUpdate:
-  useEffect(() => {
-    // Update the document title using the browser API
-    //document.title = `You clicked ${count} times`;
-  });
-
-  return (
-    <View>
-      <Text>second</Text>
-    </View>
-  );
+    const _keyExtractor = (item:JobState) => item.Id
+    return (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <MyListView 
+                ref={listRef}
+                renderItem={_renderItem}
+                keyExtractor={_keyExtractor}
+                fetch={api.secondHand.queryParams} 
+            />
+        </View>
+    );
 }

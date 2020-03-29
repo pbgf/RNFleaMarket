@@ -14,7 +14,7 @@ import { UserState } from '../../store/reducers/user'
 export interface Props {
     item: CommentBeautify,
     onPressContent: () => void,
-    onPressUser: () => void
+    onPressUser?: () => void
 }
 
 export default function CommentItem (props: Props) {

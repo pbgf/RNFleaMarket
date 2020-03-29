@@ -10,6 +10,12 @@ import UserInfo from './components/userInfo/userInfo'
 import EditInput from './components/base/editInput'
 import CommunicationDetailContainer from './containers/CommunicationDetailContainer'
 import JobDetail from './components/detail/jobDetail'
+import SecondHandDetail from './components/detail/secondHandDetail'
+import Message from './containers/MessageContainer'
+import UserPublish from './containers/UserPublishContainer'
+import UserChat from './containers/UserChatContainer'
+import UserComment from './containers/UserCommentContainer'
+import UserSecond from './containers/UserSecondContainer'
 import MyButton from './components/button/myButton'
 import { NavigationNavigatorProps, NavigationState } from 'react-navigation'
 import { _get } from './common/index'
@@ -77,6 +83,42 @@ const Main = createStackNavigator(
           screen:JobDetail,
           navigationOptions: ({ navigation }) => ({
             headerTitle: '职位详情',
+          }),
+        },
+        SecondHandDetail:{
+          screen:SecondHandDetail,
+          navigationOptions: ({ navigation }) => ({
+            headerTitle: '二手详情',
+          }),
+        },
+        Message:{
+          screen: Message,
+          navigationOptions: ({ navigation }) => ({
+            headerTitle: '我的消息',
+          }),
+        },
+        UserPublish: {
+          screen: UserPublish,
+          navigationOptions: ({ navigation }) => ({
+            headerTitle: '我发布的招聘',
+          }),
+        },
+        UserChat: {
+          screen: UserChat,
+          navigationOptions: ({ navigation }) => ({
+            headerTitle: '我发布的帖子',
+          }),
+        },
+        UserComment: {
+          screen: UserComment,
+          navigationOptions: ({ navigation }) => ({
+            headerTitle: '我发布的评论',
+          }),
+        },
+        UserSecond: {
+          screen: UserSecond,
+          navigationOptions: ({ navigation }) => ({
+            headerTitle: '我发布的二手转让',
           }),
         }
     },

@@ -47,6 +47,7 @@
     "@types/react-test-renderer": "^16.9.2",
     "@types/redux-logger": "^3.0.7",
     "babel-jest": "^24.9.0",
+    "dva-cli": "^0.10.1",
     "eslint": "^6.5.1",
     "jest": "^24.9.0",
     "metro-react-native-babel-preset": "^0.56.0",
