@@ -78,7 +78,7 @@ function meScreen(props: Props) {
             <Image style={styles.userIcon} source={{uri:(user.icon?getFile(user.icon):'' || 'default_header')}}></Image>
             <Text style={{marginLeft:15}}>{user.user_name}</Text>
         </View>
-        <Text style={{color:'rgba(0, 0, 0, 0.3)'}}> > </Text>
+        <Text style={{fontSize: 25,color:'rgba(0, 0, 0, 0.3)'}}> > </Text>
       </TouchableOpacity>
       <View style={styles.content}>
         {

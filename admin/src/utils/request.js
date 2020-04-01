@@ -1,5 +1,6 @@
 import fetch from 'dva/fetch';
-export const base_path = 'http://localhost:3000'
+export const base_path = 'http://120.79.46.144:3000'
+// export const base_path = 'http://localhost:3000'
 function parseJSON(response) {
   return response.json();
 }

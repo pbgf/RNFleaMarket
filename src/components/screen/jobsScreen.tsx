@@ -13,6 +13,7 @@ import api from '../../api/'
 import store from '../../store/'
 import { saveRefs } from '../../store/actions/'
 import { MyListViewApi } from '../base/myListView'
+import { NavigationScreenProp, NavigationState } from 'react-navigation'
 export interface Item {
     Id:string,
     job_name:string,
@@ -22,12 +23,18 @@ export interface Item {
     publish_user:string
 }
 
-export default function JobScreen (props:any) {
+export interface Props{
+    navigation:NavigationScreenProp<NavigationState>
+}
+
+export default function JobScreen (props:Props) {
     // const [lists,setLists] = useState<Item[]>([])
+    const { navigation } = props
     const [isLoad,setIsLoad] = useState(false)
     const listRef = useRef<MyListViewApi>(null)
     useEffect(()=>{
         store.dispatch(saveRefs({jobListRef:listRef}))
+        listRef.current?.refresh(navigation.getParam('userId'))
     },[])
     const _renderItem = ({item}:ListRenderItemInfo<any>) => 
             <JobItem 

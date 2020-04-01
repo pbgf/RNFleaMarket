@@ -41,7 +41,9 @@ export default (props: Props) => {
                 if(response.status == 200) {
                     saveUser(response.result[0])
                     toast_ref.current.show(response.msg)
-                    navigation.navigate('Tab')
+                    navigation.navigate('Tab', {
+                        userId: response.result[0].Id
+                    })
                 }else{
                     toast_ref.current.show(response.msg)
                 }
@@ -53,7 +55,7 @@ export default (props: Props) => {
     return (
         <View style={styles.container}>
             <View style={styles.title}>
-                <Text>欢迎来到校园跳蚤市场，请登录</Text>
+                <Text>欢迎来到校园跳蚤市场1.1，请登录</Text>
             </View>
             <View style={styles.content}>
                 <TextInput 

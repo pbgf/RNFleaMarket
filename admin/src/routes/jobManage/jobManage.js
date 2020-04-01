@@ -1,17 +1,8 @@
 import React, { useCallback, useState } from 'react'
 import { 
-    Row, 
-    Col,
     Input,
-    Table,
-    Button,
     message,
-    Radio,
 } from 'antd'
-import {
-  SearchOutlined,
-  PlusCircleOutlined
-} from '@ant-design/icons'
 import TableManage from '../../components/tableManage'
 import { jobQuery, jobAdd, jobUpdate, jobDele } from '../../services/'
 
@@ -88,7 +79,7 @@ const userManage = () => {
       edit={(entity) => (
         jobUpdate(entity).then((res) => {
           res = res.data
-          if(res.status == 200){
+          if(res.status === 200){
             console.log(res)
             message.info(res.msg)
           }
@@ -97,7 +88,7 @@ const userManage = () => {
       add={(entity) => (
         jobAdd(entity).then((res) => {
           res = res.data
-          if(res.status == 200){
+          if(res.status === 200){
             console.log(res)
             message.info(res.msg)
           }
@@ -106,7 +97,7 @@ const userManage = () => {
       dele={(Id) => (
         jobDele(Id).then((res) => {
           res = res.data
-          if(res.status == 200){
+          if(res.status === 200){
             message.info(res.msg)
           }
         })

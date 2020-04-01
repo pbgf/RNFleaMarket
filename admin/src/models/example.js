@@ -12,7 +12,6 @@ export default {
 
   effects: {
     *fetch({ payload }, { call, put }) {  // eslint-disable-line
-      yield call(delay, 1000);
       yield put({ type: 'save' });
     },
   },

@@ -1,16 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { 
     Modal, 
-    Button,
     Form,
-    Input,
-    Radio,
-    Select,
-    Cascader,
-    DatePicker,
-    InputNumber,
-    TreeSelect,
-    Switch,
  } from 'antd';
 
 const myModal = (props) => {

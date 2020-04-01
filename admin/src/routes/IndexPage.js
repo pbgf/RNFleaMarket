@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Router, Route, Switch, Redirect } from 'dva/router';
+import { Route, Switch, Redirect } from 'dva/router';
 import { Layout } from 'antd';
 import Index from './index/index'
 import UserManage from './userManage/userManage'
@@ -11,7 +11,7 @@ import SideBar from '../components/sideBar'
 import MyHeader from '../components/header'
 import styles from './IndexPage.css';
 import Cookies from 'js-cookie'
-const { Header, Footer, Sider, Content } = Layout;
+const { Header,  Sider, Content } = Layout;
 
 function IndexPage() {
   if(!Cookies.get('userSession')){

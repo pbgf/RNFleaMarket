@@ -5,12 +5,12 @@ import { MyListViewApi } from '../../components/base/myListView'
 
 const initState = {
     jobListRef: undefined,
-    messageListRef: undefined
+    secondListRef: undefined
 }
 
 export interface Refs {
     jobListRef?: RefObject<MyListViewApi> | undefined,
-    messageListRef?: RefObject<MyListViewApi> | undefined,
+    secondListRef?: RefObject<MyListViewApi> | undefined,
 }
 type Actions = SaveRefs
 const saveRefs =  (state: Refs = initState, action:Actions) => {

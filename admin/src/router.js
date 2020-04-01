@@ -1,6 +1,5 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import { Router, Route, Switch, Redirect, withRouter } from 'dva/router';
-import { message } from 'antd';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import IndexPage from './routes/IndexPage';
 import Login from './routes/login/login'

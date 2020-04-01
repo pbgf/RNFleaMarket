@@ -2,7 +2,7 @@
  * Created by hao.cheng on 2017/4/16.
  */
 import React from 'react';
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import { Form, Input, Button, Checkbox } from 'antd';
 import styles from './login.css';
 import Cookies from 'js-cookie'
 
@@ -17,7 +17,7 @@ const tailLayout = {
 export default (props) => {
     const onFinish = values => {
         console.log('Success:', values);
-        if(values.username == 'admin' && values.password == 'admin123'){
+        if(values.username === 'admin' && values.password === 'admin123'){
             if(values.remember){
                 Cookies.set('user', values, { expires: 2 })
             }

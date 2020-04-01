@@ -1,6 +1,6 @@
 // import axios from 'react-native-axios'
 
-//const base_path = '120.79.46.144:3000'
+// export const base_path = 'http://120.79.46.144:3000/api'
 export const base_path = 'http://192.168.1.6:3000/api'
 
 export interface Param {

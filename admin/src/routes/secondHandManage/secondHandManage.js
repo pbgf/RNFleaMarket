@@ -1,12 +1,7 @@
-import React, { useCallback, useState } from 'react'
+import React from 'react'
 import { 
-    Row, 
-    Col,
     Input,
-    Table,
-    Button,
     message,
-    Radio,
     InputNumber
 } from 'antd'
 import TableManage from '../../components/tableManage'
@@ -105,7 +100,7 @@ const userManage = () => {
         (
           sAdd(entity).then((res) => {
             res = res.data
-            if(res.status == 200){
+            if(res.status === 200){
               console.log(res)
               message.info(res.msg)
             }
@@ -115,7 +110,7 @@ const userManage = () => {
       dele={(Id) => 
         sDele(Id).then((res) => {
           res = res.data
-          if(res.status == 200){
+          if(res.status === 200){
             message.info(res.msg)
           }
         })

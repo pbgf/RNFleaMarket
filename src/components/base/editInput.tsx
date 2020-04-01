@@ -51,10 +51,15 @@ export default function (props:Props) {
     const [content,setContent] = useState('')
     const toast_ref = global.toast_ref
     const { navigation } = props
+    const canChoseImg = navigation.getParam('canChoseImg')
     const fields:Array<Field> = navigation.getParam('fields')
     const [state,setState] = useState(navigation.getParam('initdata'))
     const publish:(content:string, state:any, img:ImageType|null, navigation:NavigationScreenProp<any>) => void = navigation.getParam('publish')
     const choseImg = () => {
+        if(!canChoseImg){
+            global.toast_ref.current.show('这里不能添加图片')
+            return ;
+        }
         ImagePicker.openPicker({}).then((value:ImageType | ImageType[]) => {
             value = value as ImageType
             setImg(value)
@@ -73,6 +78,14 @@ export default function (props:Props) {
                 flag = 0
             }
         })
+        if(isnullOrUndefined(content)){
+            toast_ref.current.show('请填写内容完整')
+            flag = 0
+        }
+        // if(canChoseImg && isnullOrUndefined(img)){
+        //     toast_ref.current.show('请选择图片')
+        //     flag = 0
+        // }
         if(flag){
             publish(content, state, img, navigation)
         }

@@ -13,13 +13,20 @@ import api from '../../api/'
 import store from '../../store/'
 import { saveRefs } from '../../store/actions/'
 import { MyListViewApi } from '../base/myListView'
+import { NavigationScreenProp, NavigationState } from 'react-navigation'
 
-export default function secondHandSaleScreen (props:any) {
+export interface Props{
+    navigation:NavigationScreenProp<NavigationState>
+}
+
+export default function secondHandSaleScreen (props:Props) {
     // const [lists,setLists] = useState<Item[]>([])
+    const { navigation } = props
     const [isLoad,setIsLoad] = useState(false)
     const listRef = useRef<MyListViewApi>(null)
     useEffect(()=>{
-        store.dispatch(saveRefs({jobListRef:listRef}))
+        store.dispatch(saveRefs({secondListRef:listRef}))
+        listRef.current?.refresh(navigation.getParam('userId'))
     },[])
     const _renderItem = ({item}:ListRenderItemInfo<any>) => 
             <SecondHandItem 

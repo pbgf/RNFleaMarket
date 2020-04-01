@@ -86,8 +86,8 @@ function myListView (props: Props, ref:React.Ref<any>) {
                 <Text style={styles.footText}>- 我是有底线的 -</Text>
                 ) : (
                     <View style={styles.activeLoad}>
-                    <ActivityIndicator size="small" animating={state.animating} />
-                    <Text style={[styles.footText, styles.ml]}>加载更多...</Text>
+                        <ActivityIndicator size="small" animating={state.animating} />
+                        <Text style={[styles.footText, styles.ml]}>加载更多...</Text>
                     </View>
                 )
             }
@@ -95,28 +95,41 @@ function myListView (props: Props, ref:React.Ref<any>) {
         );
     };
     useEffect(() => {
-        debugger
-        getList().then(() => {
-            setState(Object.assign({},state,{
-                isLoad:true
-            }))
-            onLoad && onLoad()
-        }).catch(err => {
-            console.log(err)
-        })
+        // getList().then((response) => {
+        //     if(response.result.length === lists.length){
+        //         setState(Object.assign({},state,{
+        //             nomore: true,
+        //             isLoad:true
+        //         }))
+        //     }else{
+        //         setState(Object.assign({},state,{
+        //             isLoad:true
+        //         }))
+        //     }
+        //     onLoad && onLoad()
+        // }).catch(err => {
+        //     console.log(err)
+        // })
     },[])
     useImperativeHandle(ref, () => ({
-        refresh: (query: string) => {
+        refresh: (query: string = '') => {
             setState(Object.assign({},state,{
                 isLoad:false,
                 query
             }))
-            debugger
-            getList(state.pageCount, query).then(() => {
-                setState(Object.assign({},state,{
-                    isLoad:true,
-                    query
-                }))
+            getList(state.pageCount, query).then((response) => {
+                if(response.result.length === lists.length){
+                    setState(Object.assign({},state,{
+                        nomore: true,
+                        isLoad:true,
+                        query
+                    }))
+                }else{
+                    setState(Object.assign({},state,{
+                        isLoad:true,
+                        query
+                    }))
+                }
             })
         }
     }))

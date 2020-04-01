@@ -20,6 +20,7 @@ import MyButton from './components/button/myButton'
 import { NavigationNavigatorProps, NavigationState } from 'react-navigation'
 import { _get } from './common/index'
 import SearchInput from './containers/SearchInputContainer'
+import SaleSearchInput from './containers/SaleSearchInputContainer'
 
 const screenWidth = Math.round(Dimensions.get('window').width)
 
@@ -30,7 +31,7 @@ const defaultNavigationOptions = ({navigation}:NavigationNavigatorProps<{},Navig
       title = () => <SearchInput />
       break
     case 3:
-      title = () => <SearchInput />
+      title = () => <SaleSearchInput />
       break
     case 4:
       title = '我的'

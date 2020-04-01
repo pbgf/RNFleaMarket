@@ -13,11 +13,12 @@ import IconItem from '../base/iconItem'
 import Like from '../base/like'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
 import { UserState } from '../../store/reducers/user'
+import { ChatBeautify } from '../../store/reducers/chat'
 import api, { base_path } from '../../api/'
 import { getFile } from '../../common/'
 
 export interface Props {
-    item: any,
+    item: ChatBeautify,
     navigation: NavigationScreenProp<NavigationState>,
     userInfo: UserState
 }
@@ -26,12 +27,16 @@ export default function communicationItem(props:Props) {
     const { user, text, img, publish_time, Id, title, like_cnt, comment_cnt } = props.item //只能发一张图片
     const { navigation, userInfo } = props
     const [isLoad, setIsLoad] = useState(false)
-    let { icon, user_name } = user
-    let { width, height, url } = img
-    const myHeight = Math.floor(screenWidth/width*height)
+    let { icon, user_name } = user || {}
+    let { width, height, url } = img || {
+        width: 0,
+        height: 0,
+        url: ''
+    }
+    const myHeight = Math.floor(screenWidth/Number(width)*Number(height))
     icon && (icon = `${base_path}/file/${icon}`)
     //处理服务器端的图片路径
-    url = getFile(url)
+    url = url && getFile(url)
     Image.getSize(url,() => {
         setIsLoad(true)
     },(err) => {
@@ -83,8 +88,8 @@ export default function communicationItem(props:Props) {
             <View style={styles.bottomBar}>
                 <Like 
                     likeCnt={Number(like_cnt)} 
-                    minusCnt={(cnt) => api.chat.minusLikeCnt({like_cnt:cnt, Id, user_id:user.Id})}
-                    addCnt={(cnt) => api.chat.addLikeCnt({like_cnt:cnt, Id, user_id:user.Id})} />
+                    minusCnt={(cnt) => api.chat.minusLikeCnt({like_cnt:cnt, Id, user_id:user?.Id})}
+                    addCnt={(cnt) => api.chat.addLikeCnt({like_cnt:cnt, Id, user_id:user?.Id})} />
                 <TouchableOpacity style={styles.iconContainer} activeOpacity={0.7} onPress={jumpToDetail}>
                     <Image style={styles.IconItem} source={{uri:'message'}} />
                     <Text>{comment_cnt}</Text>

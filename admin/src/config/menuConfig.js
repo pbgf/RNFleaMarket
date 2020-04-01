@@ -1,8 +1,6 @@
 import {
-    HomeOutlined,
     UserOutlined,
     TagOutlined,
-    SettingOutlined,
     CommentOutlined,
     PaperClipOutlined
 } from '@ant-design/icons';

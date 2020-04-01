@@ -27,6 +27,7 @@ export default function Publish(props: Props)  {
         {
 			key: 'publish_tiezi', 
 			title: '发帖子', 
+			canChoseImg: true,
 			initdata: {
 				title: '',
 			},
@@ -37,13 +38,15 @@ export default function Publish(props: Props)  {
 				}
 			],
 			publish: (content:string, fieldData:any, image: ImageType) => {
-				file = { uri:image.path, type:image.mime, size:image.size, name: guid() }
-				formData.append('file', file)
+				if(image){
+					file = { uri:image?.path, type:image.mime, size:image.size, name: guid() }
+					formData.append('file', file)
+					formData.append('img_width', image.width)
+					formData.append('img_height', image.height)
+				}
 				formData.append('title', fieldData.title)
 				formData.append('text', content)
-				formData.append('img_width', image.width)
-				formData.append('img_height', image.height)
-				formData.append('publish_user', user.user_name)
+				formData.append('publish_user', user.Id)
 				api.chat.add(formData)
 				.then(res => res.json())
 				.then(response => {
@@ -62,6 +65,7 @@ export default function Publish(props: Props)  {
         {
 			key: 'publish_jobs',
 			title: '发招聘', 
+			canChoseImg: false,
 			initdata:{
 				job_pay: '',
 				job_name: ''
@@ -98,7 +102,22 @@ export default function Publish(props: Props)  {
 		},
 		{
 			key: 'publish_second', 
+			canChoseImg: false,
 			title: '二手转让', 
+			initdata: {
+				price: '',
+				title: ''
+			},
+			fields: [
+				{
+					placeholder: '这里添加标题',
+					key: 'title'
+				},
+				{
+					placeholder: '这里添加出售价格',
+					key: 'price'
+				}
+			],
 			publish: (content:string, fieldData:any) => {
 				let secondHand = Object.assign(fieldData,{
 					publish_user: user.Id,
@@ -120,11 +139,12 @@ export default function Publish(props: Props)  {
 			}
 		},
 	]
-	const jumpToEditPage = ({initdata, fields, publish}:any) => {
+	const jumpToEditPage = ({initdata, fields, publish, canChoseImg}:any) => {
         navigation.navigate('EditInput',{
             initdata,
             fields,
-            publish,
+			publish,
+			canChoseImg
         })
     }
 	const _renderItem = (data:any) => {

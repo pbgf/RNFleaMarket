@@ -3,11 +3,7 @@ import { Link } from 'dva/router'
 import { Menu } from 'antd'
 import {
     HomeOutlined,
-    UserOutlined,
-    TagOutlined,
     SettingOutlined,
-    CommentOutlined,
-    PaperClipOutlined
 } from '@ant-design/icons';
 import menus from '../config/menuConfig'
 

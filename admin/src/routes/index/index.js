@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Layout } from 'antd';
 import styles from './index.css';
 
 function IndexPage() {
