@@ -13,8 +13,10 @@ import api from '../../api'
 import { width as screenWidth } from '../../config/device'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
 import { UserState } from '../../store/reducers/user'
-import { ChatBeautify, User } from '../../store/reducers/chat'
+import { CommentBeautify } from '../../store/reducers/comment'
+import { User } from '../../store/reducers/chat'
 import { _get, autoAlert, getFile } from '../../common/'
+import { height } from '../../config/device'
 
 export interface Props {
     navigation: NavigationScreenProp<NavigationState>,
@@ -25,9 +27,11 @@ let myHeight: number
 export default function (props: Props) {
     const { userInfo, navigation } = props
     const [lists,setLists] = useState([])
-    const [content,setContent] = useState({
+    const [data,setData] = useState({
         text:'',
-        img:''
+        img:'',
+        user_name:'',
+        user_id: ''
     })
     const communicationId = navigation.getParam('communicationId')
     const getList = () => {
@@ -40,22 +44,24 @@ export default function (props: Props) {
         .then(res => res.json())
         .then(response => {
             let result = response.result[0]
-            let width = result.img.width
-            let height = result.img.height
-            myHeight = Math.floor(screenWidth/width*height)
-            setContent({
+            let width = result.img.width || 0
+            let height = result.img.height || 0
+            height&&width&& (myHeight = Math.floor(screenWidth/width*height))
+            setData({
+                user_name: result.user_name,
+                user_id: result.publish_user,
                 text: result.text,
-                img: getFile(result.img.url)
+                img: result.img.url && getFile(result.img.url)
             })
         })
     }
-    const jumpToUserPage = (user: UserState) => () => {
+    const jumpToUserPage = (user: UserState) => {
         navigation.navigate('UserInfo', {
             user,
             isEditable: false
         })
     }
-    const jumpToEditPage = (replay_user?: User | undefined) => () => {
+    const jumpToEditPage = (type:string, replay_user?: UserState | undefined) => () => {
         const initdata = {
         }
         const fields:Array<any> = []
@@ -71,8 +77,13 @@ export default function (props: Props) {
                     reply_user_name: replay_user.user_name,
                     reply_user: replay_user.Id
                 })
+            }else{
+                comment = Object.assign(fieldData,{
+                    reply_user_name: data.user_name,
+                    reply_user: data.user_id
+                })
             }
-            api.comment.add(comment)
+            return api.comment.add(comment, type)
             .then(res => res.json())
             .then(response => {
                 autoAlert(() => {
@@ -99,26 +110,31 @@ export default function (props: Props) {
     },[])
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <Image style={{width:'100%',height:myHeight}} source={{uri:content.img}} />
-                <Text>{content.text}</Text>
-            </View>
-            <ScrollView style={styles.comments}>
-                <FlatList 
-                    style={{width:'100%'}}
-                    data={lists}
-                    renderItem={ ({item}) => 
-                        <TouchableOpacity activeOpacity={0.7} onPress={jumpToEditPage(item.user)}>
-                            <CommentItem
-                                onPressUser={jumpToUserPage(userInfo)}
-                                onPressContent={jumpToEditPage(item.user)} item={item}/>
-                        </TouchableOpacity>
-                    }
-                    keyExtractor={(item:ChatBeautify) => _get(item, 'Id')}
-                />
+            <ScrollView>
+                <View style={styles.header}>
+                    <Image style={{width:'100%',height:myHeight}} source={{uri:data.img}} />
+                    <Text>{data.text}</Text>
+                </View>
+                <ScrollView style={styles.comments}>
+                    <FlatList 
+                        style={{width:'100%'}}
+                        data={lists}
+                        renderItem={ ({item}) => 
+                            <TouchableOpacity activeOpacity={0.7} onPress={jumpToEditPage('1', item.user)}>
+                                <CommentItem
+                                    onPressUser={() => {
+                                        if(item.user) jumpToUserPage(item.user)
+                                        else global.toast_ref.current.show('用户不存在')
+                                    }}
+                                    onPressContent={jumpToEditPage('1', item.user)} item={item}/>
+                            </TouchableOpacity>
+                        }
+                        keyExtractor={(item:CommentBeautify) => _get(item, 'Id')}
+                    />
+                </ScrollView>
             </ScrollView>
             <View style={styles.footer}>
-                <TouchableOpacity style={styles.input} activeOpacity={0.7} onPress={jumpToEditPage()}>
+                <TouchableOpacity style={styles.input} activeOpacity={0.7} onPress={jumpToEditPage('2')}>
                     <Text>说点什么.....</Text>
                 </TouchableOpacity>
             </View>

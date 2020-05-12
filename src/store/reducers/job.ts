@@ -1,5 +1,6 @@
 import actionType from '../actions/actionType'
 import { UpdateJobs } from '../actions/index'
+import { Img } from './chat'
 
 const initState = [{
     Id: '',
@@ -17,7 +18,8 @@ export interface JobState {
     job_detail?: string,
     publish_time?: string,
     publish_user?: string,
-    user_name?:string
+    user_name?:string,
+    imgList?:Array<Img>
 }
 
 type Actions = UpdateJobs

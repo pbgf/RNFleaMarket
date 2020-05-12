@@ -18,7 +18,7 @@ export default function (props:Props) {
     const { navigation, dele } = props
     const { Id, title, publish_user, text, publish_time } = props.item
     const _onPress = () => {
-        navigation.navigate('CommunicationDetailContainer', {
+        navigation.navigate('CommunicationDetail', {
             communicationId: Id,
             title: title
         })

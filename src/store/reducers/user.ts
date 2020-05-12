@@ -9,7 +9,8 @@ export const initState = {
     qq:'',
     icon:'',
     sex:1,
-    like_cnt: 0
+    like_cnt: 0,
+    money: 0
 }
 
 export interface UserState {
@@ -21,7 +22,8 @@ export interface UserState {
     icon?:string,
     like_cnt?:number,
     sex?:number,
-    [key:string]:any
+    [key:string]:any,
+    money?:number
 }
 type Actions = SaveUserInfo
 const saveUser =  (state:UserState = initState, action:Actions) => {

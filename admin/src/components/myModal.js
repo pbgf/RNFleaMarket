@@ -39,7 +39,7 @@ const myModal = (props) => {
                             label={item.label} 
                             name={item.name}
                             rules={item.rules}>
-                            {item.render()}
+                            {item.render.call(null,ref)}
                         </Form.Item>
                     ))
                 }

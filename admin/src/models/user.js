@@ -1,9 +1,9 @@
 
 export default {
 
-  namespace: 'example',
+  namespace: 'user',
 
-  state: {},
+  state: sessionStorage.getItem('userInfo')?JSON.parse(sessionStorage.getItem('userInfo')):{},
 
   subscriptions: {
     setup({ dispatch, history }) {  // eslint-disable-line
@@ -17,7 +17,7 @@ export default {
   },
 
   reducers: {
-    save(state, action) {
+    saveUser(state, action) {
       return { ...state, ...action.payload };
     },
   },

@@ -31,8 +31,8 @@ const userManage = () => {
     },
     {
         title: '发布人',
-        key: 'publish_user',
-        dataIndex: 'publish_user'
+        key: 'user_name',
+        dataIndex: 'user_name'
     },
     {
         title: '发布时间',
@@ -62,7 +62,19 @@ const userManage = () => {
     },
   ]
   const search = (query) => {
-    return sQuery('title', query).then(({data}) => data.result).catch(({err}) => err)
+    return sQuery('title', query)
+    .then(({data}) => 
+      {
+        if(data.status === 200){
+          return data.result
+        }else{
+          throw new Error('出现错误')
+        }
+      }
+    )
+    .catch(err => {
+      message.warning(err.toString())
+    })
     // return [
     //   {
     //     Id:'1',

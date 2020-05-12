@@ -1,5 +1,23 @@
 import request from '../utils/request';
 
+export function getPayUrl(amount,deposit_id,Id) {
+  return request(`/api/alipay/getpayurl?amount=${amount}&Id=${Id}&deposit_id=${deposit_id}`)
+}
+export function isSucc(Id) {
+  return request(`/api/alipay/isSucc?Id=${Id}`)
+}
+export function login(username, password) {
+  return request('/api/users/login', {
+    method: 'POST',
+    body: JSON.stringify({
+      telePhone_val:username,
+      passwd_val:password
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+}
 export function query() {
   return request('/api/secondHand/admin');
 }

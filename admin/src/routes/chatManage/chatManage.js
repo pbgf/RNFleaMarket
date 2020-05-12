@@ -2,11 +2,13 @@ import React, { useCallback, useState } from 'react'
 import { 
     Input,
     message,
+    Select,
 } from 'antd'
 import TableManage from '../../components/tableManage'
 import { chatAdd, chatDele, chatQuery,chatUpdate } from '../../services/'
 
 const { TextArea } = Input;
+const { Option } = Select;
 
 const userManage = () => {
   
@@ -55,6 +57,19 @@ const userManage = () => {
       )
     },
     {
+      name: 'type',
+      label: '类型',
+      render: (form) => 
+      (
+        <Select defaultValue={0} style={{ width: 120 }} onChange={(value) => {
+          form.current.setFieldsValue({type: value})
+        }}>
+          <Option value={0}>求助</Option>
+          <Option value={1}>交友</Option>
+        </Select>
+      )
+    },
+    {
       name: 'like_cnt',
       label: '被赞次数',
       render: () => <Input disabled={true} />
@@ -63,11 +78,24 @@ const userManage = () => {
       name: 'comment_cnt',
       label: '评论次数',
       render: () => <Input disabled={true} />
-    }
+    },
+    
   ]
   const search = (query) => {
-    console.log('search')
-    return chatQuery('title', query).then(({data}) => data.result)
+    return chatQuery('title', query)
+    .then(({data}) => 
+      {
+        if(data.status === 200){
+          return data.result
+        }else{
+          console.log(data)
+          throw new Error(data.msg||'出现错误')
+        }
+      }
+    )
+    .catch(err => {
+      message.warning(err.toString())
+    })
   }
   return (
     <TableManage 
@@ -81,7 +109,8 @@ const userManage = () => {
         text: '',
         like_cnt: 0,
         comment_cnt: 0,
-        publish_user: ''
+        publish_user: '',
+        type: 0
       }}
       edit={(entity) => (
         chatUpdate(entity).then((res) => {

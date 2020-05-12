@@ -2,9 +2,12 @@
  * Created by hao.cheng on 2017/4/16.
  */
 import React from 'react';
-import { Form, Input, Button, Checkbox } from 'antd';
+import { Form, Input, Button, Checkbox, message } from 'antd';
 import styles from './login.css';
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
+import md5 from 'js-md5';
+import { login } from '../../services/';
+import { connect } from 'dva';
 
 const layout = {
     labelCol: { offset: 1, span: 4 },
@@ -14,17 +17,38 @@ const tailLayout = {
     wrapperCol: { offset: 5, span: 16 },
 };
 
-export default (props) => {
+function loginPage (props) {
+    const { history, dispatch , userInfo } = props;
+    console.log(userInfo)
     const onFinish = values => {
         console.log('Success:', values);
-        if(values.username === 'admin' && values.password === 'admin123'){
-            if(values.remember){
-                Cookies.set('user', values, { expires: 2 })
+        login(values.username, md5(values.password))
+        .then(res => {
+            res = res.data;
+            if(res.status === 200){
+                if(values.remember){
+                    Cookies.set('user', values, { expires: 2 })
+                }
+                message.info('登录成功');
+                Cookies.set('userSession', values.username, { expires: 1 })
+                sessionStorage.setItem('userInfo', JSON.stringify(res.result[0]))
+                dispatch({
+                    type: 'user/saveUser',
+                    payload: res.result[0]
+                })
+                history.push('/app')
+            }else{
+                res.msg?message.warning(res.msg):message.warning('登录失败');
             }
-            Cookies.set('userSession', values.username, { expires: 1 })
-            props.history.push('/app')
-            //cookie save
-        }
+        })
+        // if(values.username === 'admin' && values.password === 'admin123'){
+            // if(values.remember){
+            //     Cookies.set('user', values, { expires: 2 })
+            // }
+            // Cookies.set('userSession', values.username, { expires: 1 })
+            // props.history.push('/app')
+        //     //cookie save
+        // }
     };
 
     const onFinishFailed = errorInfo => {
@@ -75,3 +99,6 @@ export default (props) => {
         </div>
     )
 }
+export default connect(({ user }) => ({
+    userInfo: user
+}))(loginPage)

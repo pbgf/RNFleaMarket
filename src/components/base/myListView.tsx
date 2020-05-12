@@ -14,7 +14,7 @@ import {
  } from 'react-native';
 
 export interface MyListViewApi {
-    refresh: (query: string) => void
+    refresh: (query?: string, order?: string) => void
 }
 export interface Props{
     renderItem: ListRenderItem<any>,
@@ -34,25 +34,28 @@ function myListView (props: Props, ref:React.Ref<any>) {
         pageCount: 5,
         animating: true,
         nomore: false,
-        query: ''
+        query: '',
+        order: ''
     })
-    const getList = (limit?:number, query?:string) => (
-        fetch(
-            {
-                query: state.query || query  || '',
-                limit: limit || state.pageCount,
-                offset: 0
-            }
+    const getList = (limit?:number, query?:string, order?: string) => {
+        return (
+            fetch(
+                {
+                    query: query || state.query || '',
+                    limit: limit || state.pageCount,
+                    offset: 0,
+                    order: order || state.order || '',
+                }
+            )
+            .then(res => res.json())
+            .then(response => {
+                updateLists(response.result)
+                return response
+            }).catch((err) => {
+                console.log(err)
+            })
         )
-        .then(res => res.json())
-        .then(response => {
-            console.log(response)
-            updateLists(response.result)
-            return response
-        }).catch((err) => {
-            console.log(err)
-        })
-    )
+    }
     const _onRefresh = () => {
         setState(Object.assign({},state,{
             refreshing: true,
@@ -70,6 +73,7 @@ function myListView (props: Props, ref:React.Ref<any>) {
                 pageCount: state.pageCount + state.pageLimit
             }))
             getList(state.pageCount + state.pageLimit).then((response) => {
+                // debugger
                 if(response.result.length === lists.length){
                     setState(Object.assign({},state,{
                         nomore: true
@@ -77,7 +81,7 @@ function myListView (props: Props, ref:React.Ref<any>) {
                 }
             })
         }
-    } 
+    }
     const ListFooterComponent = () => {
         return (
           <View style={styles.bottomfoot}>
@@ -112,22 +116,26 @@ function myListView (props: Props, ref:React.Ref<any>) {
         // })
     },[])
     useImperativeHandle(ref, () => ({
-        refresh: (query: string = '') => {
+        refresh: (query: string = '', order: string) => {
             setState(Object.assign({},state,{
                 isLoad:false,
-                query
+                query,
+                order
             }))
-            getList(state.pageCount, query).then((response) => {
+            getList(state.pageCount, query, order).then((response) => {
+                // debugger
                 if(response.result.length === lists.length){
                     setState(Object.assign({},state,{
                         nomore: true,
                         isLoad:true,
-                        query
+                        query,
+                        order
                     }))
                 }else{
                     setState(Object.assign({},state,{
                         isLoad:true,
-                        query
+                        query,
+                        order
                     }))
                 }
             })

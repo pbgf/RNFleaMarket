@@ -59,7 +59,19 @@ const userManage = () => {
     },
   ]
   const search = (query) => {
-    return jobQuery('job_name', query).then(({data}) => data.result)
+    return jobQuery('job_name', query)
+          .then(({data}) => 
+            {
+              if(data.status === 200){
+                return data.result
+              }else{
+                throw new Error('出现错误')
+              }
+            }
+          )
+          .catch(err => {
+            message.warning(err.toString())
+          })
   }
   return (
     <TableManage 

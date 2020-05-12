@@ -29,12 +29,29 @@ export interface Props{
 
 export default function (props:Props) {
     const { navigation } = props
-    const { Id, publish_user_name, comment, chat_id, chat } = props.item
+    const { Id, publish_user_name, comment, chat_id, chat, type } = props.item
     const _onPress = () => {
-        navigation.navigate('CommunicationDetailContainer',{
-            communicationId: chat_id,
-            title: chat.title
-        })
+        console.log(chat_id)
+        switch(type){
+            case '1':
+            case '2':
+                navigation.navigate('CommunicationDetail',{
+                    communicationId: chat_id,
+                    title: chat?.title
+                })
+                break;
+            case '3':
+                navigation.navigate('SecondHandDetail',{
+                    secondHandId: chat_id,
+                })
+                break;
+            case '4':
+                navigation.navigate('JobDetail',{
+                    jobId: chat_id,
+                })
+                break;
+        }
+        
     }
     return (
         <TouchableOpacity
@@ -42,7 +59,7 @@ export default function (props:Props) {
             <View style={styles.container}>
                 <View style={styles.title}>
                     <Text style={{fontWeight: 'bold'}}>{publish_user_name}</Text>
-                    <Text style={{fontSize: 14, color: '#505050'}}>回复了我的评论</Text>
+                    <Text style={{fontSize: 14, color: '#505050'}}>{type==='3'?'给我留了言':'回复了我的'+ (type==='1'?'评论':type==='2'?'帖子':'')}</Text>
                 </View>
                 <Text>{comment?.content}</Text>
                 <Text style={{fontSize: 10, color: '#333'}}>{comment?.publish_time}</Text>

@@ -16,5 +16,5 @@ function Root () {
         </Provider>
     )
 }
-
+console.disableYellowBox = true 
 AppRegistry.registerComponent(appName, () => Root);

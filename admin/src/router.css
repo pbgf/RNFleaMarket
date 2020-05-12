@@ -1,26 +1,45 @@
 /* 路由前进时的入场/离场动画 */
 :global(.fade-enter) {
-    opacity: 0;
-    transform: translateX(100%);
-  }
+  opacity: 0;
+}
   
-  :global(.fade-enter-active ){
-    opacity: 1;
-    transform: translateX(0);
-    transition: all 500ms;
-  }
+:global(.fade-enter-active ){
+  opacity: 1;
+  transition: all 500ms;
+}
+
+:global(.fade-exit) {
+  opacity: 1;
+}
+
+:global(.fade-exit-active) {
+  opacity: 0;
+  transition: all 500ms;
+}
   
-  :global(.fade-exit) {
-    opacity: 1;
-    transform: translateX(0);
-  }
+:global(.tra-enter) {
+  opacity: 0;
+  transform: translateY(100%);
+}
   
-  :global(.fade-exit-active) {
-    opacity: 0;
-    transform: translateX(-100%);
-    transition: all 500ms;
-  }
-  
+:global(.tra-enter-active ){
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 500ms;
+}
+
+:global(.tra-exit) {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+:global(.tra-exit-active) {
+  opacity: 0;
+  transform: translateY(100%);
+  transition: all 500ms;
+}
+
 :global(.container){
-    height: 100%;
+  height: 100%;
+  overflow: hidden;
 }

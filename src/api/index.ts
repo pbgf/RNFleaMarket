@@ -1,7 +1,7 @@
 // import axios from 'react-native-axios'
 
 // export const base_path = 'http://120.79.46.144:3000/api'
-export const base_path = 'http://192.168.1.6:3000/api'
+export const base_path = 'http://192.168.1.5:3000/api'
 
 export interface Param {
     searchKey: string,
@@ -15,12 +15,16 @@ export interface Response {
 export interface pageParam {
     limit: number,
     offset: number,
-    query: string
+    query: string,
+    order?: string
 }
 // const $http = axios.create({
 //     baseURL: base_path
 // })
 export default {
+    news:() => fetch(base_path + '/news', {
+        method:'GET'
+    }),
     upload: (formData:FormData) => fetch(base_path + '/upload', {
         method: 'POST',
         headers: {
@@ -53,12 +57,19 @@ export default {
                 'Content-Type': 'multipart/form-data'
             }
         }),
+        cost: (param:object) => fetch(base_path + '/users/cost',{
+            method: 'PUT',
+            body: JSON.stringify(param),
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }),
     },
     comment:{
         queryByCm: (id:string) => fetch(base_path + '/comments/byCommunication/'+id,{
             method: 'GET'
         }), //queryByCommunication
-        add: (comment:object) => fetch(base_path + '/comments/publishComment',{
+        add: (comment:object, type:string) => fetch(base_path + '/comments/publishComment?type=' + type,{
             method:'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -178,12 +189,12 @@ export default {
                 'Content-Type': 'application/json'
             }
         }),
-        add: (entity:object) => fetch(base_path + '/secondHand/publishSecondHand',{
+        add: (formData:FormData) => fetch(base_path + '/secondHand/publishSecondHand',{
             method:'POST',
+            body: formData,
             headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(entity)
+                'Content-Type': 'multipart/form-data'
+            }
         }),
         queryByUserId: (params:Object) => fetch(base_path + '/secondHand/byUserId', { 
             method: 'POST',
@@ -199,6 +210,42 @@ export default {
               'Content-Type': 'application/json',
             }
         })
+    },
+    order:{
+        query:(searchKey?:string, searchVal?:string) => fetch(base_path + '/orders?' + (searchKey?`${searchKey}=${searchVal}`:''),{
+            method:'GET'
+        }),
+        queryById:(id:string) => fetch(base_path + '/orders/getById?Id='+id,{
+            method:'GET'
+        }),
+        add:(entity:object) => fetch(base_path + '/orders/createOrder',{
+            method:'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(entity)
+        }),
+        queryBuy: (params?:Object) => fetch(base_path + '/orders/getBuy',{
+            method:'POST',
+            body: JSON.stringify(params),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }),
+        querySale: (params:Object) => fetch(base_path + '/orders/getSale?',{
+            method: 'POST',
+            body: JSON.stringify(params),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }),
+        updateState:(params:Object) => fetch(base_path + '/orders/updateState',{
+            method: 'PUT',
+            body: JSON.stringify(params),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }),
     },
     message:{
         query: (searchKey?:string, searchVal?:string) => fetch(base_path + '/messages?' + (searchKey?`${searchKey}=${searchVal}`:''),{

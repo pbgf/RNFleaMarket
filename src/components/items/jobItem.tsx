@@ -27,7 +27,7 @@ export default function (props:Props) {
         <TouchableOpacity style={styles.row} onPress={_onPress}>
             <View style={styles.container}>
                 <Text style={styles.name}>{job_name}</Text>
-                <Text style={styles.pay}>{job_pay}</Text>
+                <Text style={styles.pay}>{job_pay}/月</Text>
                 <Text style={styles.userName}>发布者：{user_name}  发布时间：{publish_time}</Text>
                 {
                     controlable&&dele?(

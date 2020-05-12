@@ -3,9 +3,11 @@ import { connect } from 'react-redux';
 import { 
   Text, 
   View, 
+  Modal,
   Button,
   Image,
   StyleSheet,
+  ActivityIndicator,
   TouchableOpacity
  } from 'react-native';
 import { UserState } from '../../store/reducers/user'
@@ -49,6 +51,18 @@ const list = [
     url: 'UserPublish',
     key: 5
   },
+  // {
+  //   icon: 'buy',
+  //   title: '我的订单',
+  //   url: 'CardItem',
+  //   key: 6
+  // },
+  // {
+  //   icon: 'money',
+  //   title: '我卖出的',
+  //   url: 'CardItem',
+  //   key: 7
+  // },
 ]
 
 const mapStateToProps = ({user}:State) => {
@@ -59,7 +73,8 @@ const mapStateToProps = ({user}:State) => {
 
 function meScreen(props: Props) {
   //const [count, setCount] = useState(0);
-  const { user, navigation } = props
+  const { user, navigation } = props;
+  const [modalVisible] = useState(true);
   // Similar to componentDidMount and componentDidUpdate:
   
   useEffect(() => {
@@ -68,18 +83,45 @@ function meScreen(props: Props) {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => {
-          navigation.navigate('UserInfo', {
-            user: user,
-            isEditable: true
-          })
-        }} activeOpacity={0.7} style={styles.header}>
-        <View style={styles.userInfo}>
-            <Image style={styles.userIcon} source={{uri:(user.icon?getFile(user.icon):'' || 'default_header')}}></Image>
-            <Text style={{marginLeft:15}}>{user.user_name}</Text>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => {
+            navigation.navigate('UserInfo', {
+              user: user,
+              isEditable: true
+            })
+          }} activeOpacity={0.7} style={styles.userHeader}>
+          <View style={styles.userInfo}>
+              <Image style={styles.userIcon} source={{uri:(user.icon?getFile(user.icon):'' || 'default_header')}}></Image>
+              <Text style={{marginLeft:15}}>{user.user_name}</Text>
+          </View>
+          <Text style={{fontSize: 25,color:'rgba(0, 0, 0, 0.3)'}}> > </Text>
+        </TouchableOpacity>
+        <View style={styles.headerMenu}>
+          <TouchableOpacity style={styles.menuItem} onPress={() => {
+            navigation.navigate('CardList', {
+              Id: user.Id,
+              type: 2
+            })
+          }}>
+            <View style={styles.menuIcon}>
+                <Image style={{width:30,height:30}} source={{uri: 'buy'}} />
+                <Text style={{fontSize: 15,width:70,marginLeft:10}}>我买到的</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.menuItem} onPress={() => {
+            console.log(user.Id)
+            navigation.navigate('CardList', {
+              Id: user.Id,
+              type: 1
+            })
+          }}>
+            <View style={styles.menuIcon}>
+                <Image style={{width:30,height:30}} source={{uri: 'money'}} />
+                <Text style={{fontSize: 15,width:70,marginLeft:10}}>我卖出的</Text>
+            </View>
+          </TouchableOpacity>
         </View>
-        <Text style={{fontSize: 25,color:'rgba(0, 0, 0, 0.3)'}}> > </Text>
-      </TouchableOpacity>
+      </View>
       <View style={styles.content}>
         {
           list.map(item => (
@@ -93,6 +135,17 @@ function meScreen(props: Props) {
           ))
         }
       </View>
+      {/* <Modal
+        animationType="slide"
+        transparent={false}
+        visible={modalVisible}
+        >
+            <View style={{flex:1, justifyContent: 'center', alignItems: 'center'}}>
+                <View style={{ width:200,height:150 }}>
+                    <ActivityIndicator size="large" color="#e20000"/>
+                </View>
+            </View>
+      </Modal> */}
     </View>
   );
 }
@@ -102,17 +155,19 @@ const styles = StyleSheet.create({
     flex:1
   },
   header:{
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent:'space-between',
-    alignItems: 'center',
-    marginHorizontal:10,
-    marginBottom: 20,
+    flex: 2,
+    justifyContent: 'center',
     borderBottomColor: 'rgba(0, 0, 0, 0.3)',
     borderBottomWidth: 0.5
   },
+  userHeader:{
+    // height: '40%',
+    flexDirection: 'row',
+    justifyContent:'space-between',
+    alignItems: 'center',
+  },
   userInfo:{
-    height:'100%',
+    padding:10,
     flexDirection: 'row',
     alignItems:'center',
   },
@@ -123,6 +178,23 @@ const styles = StyleSheet.create({
     width: 70,
     height:70,
   },
+  headerMenu:{
+    // height: '40%',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  menuItem:{
+    width: '45%',
+    padding: 10,
+    // backgroundColor: 'white'
+    // borderColor: '',
+    // borderWidth: 0.5
+  },
+  menuIcon:{
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   column:{
     flex:1,
     flexDirection:'column'
@@ -131,7 +203,7 @@ const styles = StyleSheet.create({
 
   },
   content:{
-    flex: 4,
+    flex: 5,
   },
   item:{
     flexDirection: 'row',

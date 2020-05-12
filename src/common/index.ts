@@ -24,6 +24,10 @@ export const isnullOrUndefined = (target:any):boolean => {
   return target === null || target === undefined
 }
 
+export const isnoop = (target:any) => {
+  return target === ''
+}
+
 export const autoAlert = (succCb:() => string, failCb:() => string):Promise<void> => {
   let msg:string
   const toast_ref = global.toast_ref 

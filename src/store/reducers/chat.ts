@@ -1,3 +1,4 @@
+import { UserState } from './user'
 export interface ChatState {
     Id:string,
     title?:string,
@@ -8,7 +9,8 @@ export interface ChatState {
     like_cnt?:string,
     comment_cnt?:string,
     publish_user?:string,
-    publish_time?:string
+    publish_time?:string,
+    type?:number
 }
 
 export interface Img {
@@ -33,6 +35,6 @@ export interface ChatBeautify {
     like_cnt:string,
     comment_cnt:string,
     publish_user:string,
-    user?:User,
+    user?:UserState,
     publish_time:string
 }

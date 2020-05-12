@@ -2,15 +2,17 @@ import React, { useState, useEffect, useRef } from 'react'
 import {
     View,
     Text,
-    ImageBackground,
-    TextInput,
-    TouchableOpacity,
+    Modal,
     Image,
-    StyleSheet
+    TextInput,
+    StyleSheet,
+    ImageBackground,
+    TouchableOpacity,
+    ActivityIndicator,
+    KeyboardAvoidingView,
 } from 'react-native'
 import MyButton from './button/myButton'
 import api from '../api/index'
-import Toast from '../components/base/Toast'
 import ImagePicker from 'react-native-image-crop-picker'
 import { guid, autoAlert } from '../common'
 import md5 from 'js-md5'
@@ -27,6 +29,7 @@ const Register = (props: Props) => {
     const [userName_val,onChangeUserName] = useState('')
     const [passwd_val,onChangePasswd] = useState('')
     const [isUpload,onChangeIsUpload] = useState(false)
+    const [modalVisible, setVisible] = useState(false)
     const toast_ref = global.toast_ref
     //const toast_com = toast_ref.current;
     const [imgPath,onChangeImgPath] = useState('')
@@ -54,6 +57,7 @@ const Register = (props: Props) => {
     }
     const registerHandler = () => {
         if(isEmpty()){
+            setVisible(true)
             formData.append('telephone', telePhone_val)
             formData.append('qq', QQTel_val)
             formData.append('user_name', userName_val)
@@ -62,8 +66,10 @@ const Register = (props: Props) => {
             .then(res => res.json())
             .then(response => {
                 autoAlert(() => {
+                    setVisible(false)
                     return '注册成功'
                 }, () => {
+                    setVisible(false)
                     if(response.status != 200){
                         return response.msg
                     }
@@ -87,7 +93,8 @@ const Register = (props: Props) => {
     }
 
     return (
-        <View style={styles.container}>
+        <KeyboardAvoidingView behavior="position" style={{width:'100%',height:'80%'}}>
+            <View style={styles.container}>
             <ImageBackground source={{uri:'cuitbeijing'}} style={styles.title}>
                 <Text>校园跳蚤市场</Text>
             </ImageBackground>
@@ -140,7 +147,19 @@ const Register = (props: Props) => {
                     isRadius={true}
                     onPress={()=>{registerHandler()}} width="70%"/>
             </View>
-        </View>
+            <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            >
+                <View style={{flex:1, justifyContent: 'center', alignItems: 'center'}}>
+                    <View style={{ width:200,height:150 }}>
+                        <ActivityIndicator size="large" color="#e20000"/>
+                    </View>
+                </View>
+            </Modal>
+            </View>
+        </KeyboardAvoidingView>
     )
 }
 
@@ -148,7 +167,7 @@ export default Register
 
 const styles = StyleSheet.create({
     container:{
-        flex:0.75,
+        height:'100%',
         flexDirection: 'column',
         justifyContent:'center',
         alignItems:'center'

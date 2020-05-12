@@ -18,7 +18,6 @@ export interface Props{
 export default function (props:Props) {
     const { navigation, controlable, dele } = props
     const { Id, title, price, publish_user, user_name, publish_time } = props.item
-    console.log(props.item)
     const _onPress = () => {
         navigation.navigate('SecondHandDetail',{
             secondHandId:Id
@@ -44,7 +43,8 @@ export default function (props:Props) {
 
 const styles = StyleSheet.create({
     row: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        height: 100
     },
     deleBtn: {
         position:'absolute', 

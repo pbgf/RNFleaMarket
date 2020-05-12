@@ -4,6 +4,7 @@ import api from '../../api/'
 import MyListView, {MyListViewApi} from '../base/myListView'
 import { NavigationScreenProp, NavigationState } from 'react-navigation'
 import { UserState } from '../../store/reducers/user'
+import { CommentBeautify } from '../../store/reducers/comment'
 import CommentItem from '../items/commentItem'
 
 export interface Props {
@@ -18,11 +19,27 @@ export default (props: Props) => {
     const getList = () => {
         ref?.current?.refresh(user.Id)
     }
-    const _onPressContent = (id:string, title:string) => {
-        navigation.navigate('CommunicationDetailContainer', {
-            communicationId: id,
-            title: title
-        })
+    const _onPressContent = ({title, type, chat_id}:CommentBeautify) => {
+        switch(type){
+            case '1':
+            case '2':
+                navigation.navigate('CommunicationDetail', {
+                    communicationId: chat_id,
+                    title: title
+                })
+                break;
+            case '3':
+                navigation.navigate('SecondHandDetail',{
+                    secondHandId: chat_id,
+                })
+                break;
+            case '4':
+                navigation.navigate('JobDetail',{
+                    jobId: chat_id,
+                })
+                break;
+        }
+        
     }
     useEffect(() => {
         getList()
@@ -32,7 +49,7 @@ export default (props: Props) => {
             renderItem={({item}) => 
                 <CommentItem 
                 item={item} 
-                onPressContent={_onPressContent.bind(null, item.chat_id, item.title)} />
+                onPressContent={_onPressContent.bind(null, item)} />
             } 
             fetch={api.comment.queryByUserId} 
             keyExtractor={(item) => item.Id}  />

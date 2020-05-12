@@ -8,14 +8,17 @@ import Register from './components/register'
 import Publish from './containers/PublishContainer'
 import UserInfo from './components/userInfo/userInfo'
 import EditInput from './components/base/editInput'
-import CommunicationDetailContainer from './containers/CommunicationDetailContainer'
-import JobDetail from './components/detail/jobDetail'
-import SecondHandDetail from './components/detail/secondHandDetail'
+import CommunicationDetail from './containers/CommunicationDetailContainer'
+import JobDetail from './containers/JobContainer'
+import SecondHandDetail from './containers/SecondHandDetailContainer'
 import Message from './containers/MessageContainer'
 import UserPublish from './containers/UserPublishContainer'
 import UserChat from './containers/UserChatContainer'
 import UserComment from './containers/UserCommentContainer'
 import UserSecond from './containers/UserSecondContainer'
+import CardList from './components/base/cardList'
+import OrderDetail from './components/detail/orderDetail'
+import OrderSubmit from './containers/OrderSubmitContainer'
 import MyButton from './components/button/myButton'
 import { NavigationNavigatorProps, NavigationState } from 'react-navigation'
 import { _get } from './common/index'
@@ -74,8 +77,11 @@ const Main = createStackNavigator(
         Tab,
         UserInfo,
         EditInput,
-        CommunicationDetailContainer:{
-          screen:CommunicationDetailContainer,
+        CardList,
+        OrderDetail,
+        OrderSubmit,
+        CommunicationDetail:{
+          screen:CommunicationDetail,
           navigationOptions: ({ navigation }:NavigationNavigatorProps<{},NavigationState>) => ({
             headerTitle: _get<string>(navigation,'state.params.title'),
           }),

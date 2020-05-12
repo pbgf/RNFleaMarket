@@ -30,24 +30,42 @@ export default function Publish(props: Props)  {
 			canChoseImg: true,
 			initdata: {
 				title: '',
+				type: 0
 			},
 			fields: [
 				{
+					key: 'type',
+					type: 1,
+					items: [
+						{
+							label: '求助',
+							value: 0
+						},
+						{
+							label: '交友',
+							value: 1
+						}
+					]
+				},
+				{
 					placeholder: '这里添加标题',
-					key: 'title'
+					key: 'title',
+					type:0
 				}
 			],
-			publish: (content:string, fieldData:any, image: ImageType) => {
-				if(image){
-					file = { uri:image?.path, type:image.mime, size:image.size, name: guid() }
+			publish: (content:string, fieldData:any, imageList: Array<ImageType>) => {
+				if(imageList.length){
+					let image = imageList[0]
+					file = { uri:image.path, type:image.mime, size:image.size, name: guid() }
 					formData.append('file', file)
-					formData.append('img_width', image.width)
-					formData.append('img_height', image.height)
+					formData.append('img_width', String(image.width))
+					formData.append('img_height', String(image.height))
 				}
 				formData.append('title', fieldData.title)
+				formData.append('type', fieldData.type)
 				formData.append('text', content)
 				formData.append('publish_user', user.Id)
-				api.chat.add(formData)
+				return api.chat.add(formData)
 				.then(res => res.json())
 				.then(response => {
 					autoAlert(() => {
@@ -65,7 +83,7 @@ export default function Publish(props: Props)  {
         {
 			key: 'publish_jobs',
 			title: '发招聘', 
-			canChoseImg: false,
+			canChoseImg: true,
 			initdata:{
 				job_pay: '',
 				job_name: ''
@@ -73,11 +91,13 @@ export default function Publish(props: Props)  {
 			fields: [
 				{
 					placeholder: '这里添加工作名称',
-					key: 'job_name'
+					key: 'job_name',
+					type:0
 				},
 				{
 					placeholder: '这里添加月薪',
-					key: 'job_pay'
+					key: 'job_pay',
+					type:0
 				}
 			],
 			publish: (content:string, fieldData:any) => {
@@ -85,7 +105,7 @@ export default function Publish(props: Props)  {
 					publish_user: user.Id,
 					job_detail: content
 				})
-				api.job.add(job)
+				return api.job.add(job)
 				.then(res => res.json())
 				.then(response => {
 					autoAlert(() => {
@@ -102,7 +122,7 @@ export default function Publish(props: Props)  {
 		},
 		{
 			key: 'publish_second', 
-			canChoseImg: false,
+			canChoseImg: true,
 			title: '二手转让', 
 			initdata: {
 				price: '',
@@ -111,19 +131,30 @@ export default function Publish(props: Props)  {
 			fields: [
 				{
 					placeholder: '这里添加标题',
-					key: 'title'
+					key: 'title',
+					type:0
 				},
 				{
 					placeholder: '这里添加出售价格',
-					key: 'price'
+					key: 'price',
+					type:0
 				}
 			],
-			publish: (content:string, fieldData:any) => {
-				let secondHand = Object.assign(fieldData,{
-					publish_user: user.Id,
-					detail: content
-				})
-				api.secondHand.add(secondHand)
+			publish: (content:string, fieldData:any, imageList: Array<ImageType>) => {
+				if(imageList.length){
+					for(let i=0;i<imageList.length;i++){
+						let image = imageList[i]
+						file = { uri:image.path, type:image.mime, size:image.size, name: guid() }
+						formData.append(`file${i}`, file)
+						formData.append(`img_width_${file.name}`, String(image.width))
+						formData.append(`img_height_${file.name}`, String(image.height))
+					}
+				}
+				formData.append('detail', content)
+				formData.append('publish_user', user.Id)
+				formData.append('price', fieldData.price)
+				formData.append('title', fieldData.title)
+				return api.secondHand.add(formData)
 				.then(res => res.json())
 				.then(response => {
 					autoAlert(() => {

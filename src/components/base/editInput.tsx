@@ -1,15 +1,18 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import {
     View,
     Text,
+    Modal,
     Image,
+    Picker,
     TextInput,
     TouchableOpacity,
+    ActivityIndicator,
     StyleSheet
 } from 'react-native'
 import ImagePicker, { Image as ImageType } from 'react-native-image-crop-picker'
 import { NavigationScreenProp } from 'react-navigation'
-import { isnullOrUndefined, _get } from '../../common/'
+import { isnullOrUndefined, _get, isnoop } from '../../common/'
 
 interface ImgItemProps{
     source:string,
@@ -33,7 +36,9 @@ function ImgItem (props:ImgItemProps) {
 }
 export interface Field{
     placeholder:string,
-    key:string
+    key:string,
+    type:number,
+    items?:Array<any>
 }
 export interface Props{
     navigation:NavigationScreenProp<any>,
@@ -45,16 +50,19 @@ export interface Props{
  * field
  */
 export default function (props:Props) {
-    const [isChosed,setIsChosed] = useState(false)
-    const [img,setImg] = useState<ImageType | null>(null)
+    //const [isChosed,setIsChosed] = useState(false)
+    // const [img,setImg] = useState<ImageType | null>(null)
+    let timer = 0
+    const [imgList, setImgList] = useState<Array<ImageType>>([])
     const [title,setTitle] = useState('')
     const [content,setContent] = useState('')
+    const [modalVisible,setVisible] = useState(false)
     const toast_ref = global.toast_ref
     const { navigation } = props
     const canChoseImg = navigation.getParam('canChoseImg')
     const fields:Array<Field> = navigation.getParam('fields')
     const [state,setState] = useState(navigation.getParam('initdata'))
-    const publish:(content:string, state:any, img:ImageType|null, navigation:NavigationScreenProp<any>) => void = navigation.getParam('publish')
+    const publish:(content:string, state:any, imgList:Array<ImageType>, navigation:NavigationScreenProp<any>) => Promise<any> = navigation.getParam('publish')
     const choseImg = () => {
         if(!canChoseImg){
             global.toast_ref.current.show('这里不能添加图片')
@@ -62,23 +70,25 @@ export default function (props:Props) {
         }
         ImagePicker.openPicker({}).then((value:ImageType | ImageType[]) => {
             value = value as ImageType
-            setImg(value)
-            setIsChosed(true)
+            setImgList(imgList.concat(value))
+            //setImg(value)
+            //setIsChosed(true)
         })
     }
-    const close = () => {
-        setImg(null)
-        setIsChosed(false)
+    const close = (index:number) => () => {
+        // imgList.splice(index,1)
+        setImgList(imgList.filter((item,idx) => idx!=index))
+        //setIsChosed(false)
     }
     const _publish = () => {
         let flag = 1
         Object.keys(state).forEach((key) => {
-            if(isnullOrUndefined(state[key])){
+            if(isnullOrUndefined(state[key]) || isnoop(state[key])){
                 toast_ref.current.show('请填写内容完整')
                 flag = 0
             }
         })
-        if(isnullOrUndefined(content)){
+        if(isnullOrUndefined(content) || isnoop(content)){
             toast_ref.current.show('请填写内容完整')
             flag = 0
         }
@@ -87,7 +97,14 @@ export default function (props:Props) {
         //     flag = 0
         // }
         if(flag){
-            publish(content, state, img, navigation)
+            //console.log(imgList)
+            setVisible(true)
+            publish(content, state, imgList, navigation).finally(() => {
+                setVisible(false)
+            })
+            timer = setTimeout(() => {
+                setVisible(false)
+            },50000)
         }
         // if(hasTitle){
         //     if(title&&content){
@@ -101,10 +118,15 @@ export default function (props:Props) {
         //     toast_ref.current.show('请填写内容')
         // }
     }
+    useEffect(() => {
+        return function cleanup () {
+            clearTimeout(timer)
+        }
+    },[])
     return (
         <View style={styles.container}>
             {
-                fields.map((item) => (
+                fields.map((item) => (item.type==0?(
                     <View style={styles.title} key={item.key}>
                         <TextInput 
                         style={[styles.titleInput,styles.textInput]} 
@@ -117,7 +139,19 @@ export default function (props:Props) {
                             [item.key]: text
                         }))} />
                     </View>)
-                )
+                :<Picker 
+                    selectedValue={state[item.key]} 
+                    style={{width: '100%'}}
+                    onValueChange={(itemValue, itemIndex) =>
+                        {
+                            setState(Object.assign({},state,{
+                                [item.key]: itemValue
+                            }))
+                        }
+                    }>
+                    <Picker.Item label="求助" value={0} />
+                    <Picker.Item label="交友" value={1} />
+                </Picker>))
             }
             <View style={styles.content}>
                 <TextInput 
@@ -131,7 +165,7 @@ export default function (props:Props) {
             </View>
             <View style={styles.footer}>
                 <View style={styles.items}>
-                    {isChosed?<ImgItem source={_get(img, 'path', '')} onPress={close} />:null}
+                    {imgList.map((img,index) => <ImgItem key={img.modificationDate} source={_get(img, 'path', '')} onPress={close(index)} />)}
                 </View>
                 <View style={styles.toolBar}>
                     <TouchableOpacity style={styles.imgBtn} onPress={choseImg}>
@@ -145,6 +179,17 @@ export default function (props:Props) {
                     </TouchableOpacity>
                 </View>
             </View>
+            <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            >
+                <View style={{flex:1, justifyContent: 'center', alignItems: 'center'}}>
+                    <View style={{ width:200,height:150 }}>
+                        <ActivityIndicator size="large" color="#e20000"/>
+                    </View>
+                </View>
+            </Modal>
         </View>
     )
 }
@@ -191,7 +236,8 @@ const styles = StyleSheet.create({
     },
     items:{
         width:'100%',
-        height:150
+        height:150,
+        flexDirection: 'row'
     },
     toolBar:{
         height:50,

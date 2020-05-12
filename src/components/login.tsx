@@ -5,7 +5,8 @@ import {
     TextInput,
     Button,
     StyleSheet,
-    BackHandler
+    AsyncStorage,
+    KeyboardAvoidingView
 } from 'react-native'
 import MyButton from './button/myButton'
 import api from '../api/index'
@@ -37,9 +38,15 @@ export default (props: Props) => {
             }
             api.user.login(user)
             .then(res => res.json())
-            .then(response => {
+            .then(async (response) => {
                 if(response.status == 200) {
                     saveUser(response.result[0])
+                    try{
+                        await AsyncStorage.setItem('user_name', telePhone_val)
+                        await AsyncStorage.setItem('password', passwd_val)
+                    }catch (err){
+                        toast_ref.current.show(err.toString())
+                    }
                     toast_ref.current.show(response.msg)
                     navigation.navigate('Tab', {
                         userId: response.result[0].Id
@@ -52,10 +59,22 @@ export default (props: Props) => {
             toast_ref.current.show('请填写账号和密码')
         }
     }
+    useEffect(() => {
+        (async () => {
+            try{
+                let user_name = await AsyncStorage.getItem('user_name')
+                user_name&&OnChangeTelePhone(user_name)
+                let password = await AsyncStorage.getItem('password')
+                password&&onChangePasswd(password)
+            }catch (err){
+                toast_ref.current.show(err)
+            }
+        })()
+    },[])
     return (
-        <View style={styles.container}>
+        <KeyboardAvoidingView behavior="padding" style={styles.container}>
             <View style={styles.title}>
-                <Text>欢迎来到校园跳蚤市场1.1，请登录</Text>
+                <Text>欢迎来到校园跳蚤市场，请登录</Text>
             </View>
             <View style={styles.content}>
                 <TextInput 
@@ -84,7 +103,7 @@ export default (props: Props) => {
                     isRadius={true}
                     onPress={()=>{props.navigation.navigate('Register')}} width="70%"/>
             </View>
-        </View>
+        </KeyboardAvoidingView>
     )
 }
 

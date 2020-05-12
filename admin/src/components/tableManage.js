@@ -1,4 +1,4 @@
-import React, {  useState, useEffect } from 'react'
+import React, {  useState, useEffect, useReducer } from 'react'
 import { 
     Row, 
     Col,
@@ -17,6 +17,7 @@ import MyModal from './myModal'
 const { confirm } = Modal;
 const tableManage = (props) => {
     const { columns, modalConfig, modalTitleS, search, edit, add, dele, defaultVal } = props
+    const [tableCol, setTableCol] = useState(columns)
     const [visible,setVisible] = useState(false)
     const [fieldsValue, setFieldsValue] = useState()
     const [status, setStatus] = useState('add') //add || edit
@@ -48,6 +49,7 @@ const tableManage = (props) => {
               </span>
             ),
         })
+        setTableCol(columns)
         _search()
     },[])
     const handlerCancel = () => {
@@ -110,7 +112,7 @@ const tableManage = (props) => {
             </Row>
             <Row>
                 <Col span={24}>
-                    <Table rowKey="Id" style={{marginTop: '20px'}} columns={columns} dataSource={data} />
+                    <Table rowKey="Id" style={{marginTop: '20px'}} columns={tableCol} dataSource={data} />
                 </Col>
             </Row>
             <MyModal

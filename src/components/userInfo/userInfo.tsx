@@ -107,6 +107,14 @@ export default (props:Props ) => {
                         <Picker.Item label="女" value={0} />
                     </Picker>
                 </View>
+                {
+                    isEditable?(
+                        <View style={styles.item}>
+                            <Text>余额:</Text>
+                            <TextInput value={String(user.money)} editable={false} />
+                        </View>
+                    ):null
+                }
                 <View style={styles.item}>
                     <Text>获赞:</Text>
                     <TextInput value={String(user.like_cnt)} editable={false} />

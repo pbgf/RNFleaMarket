@@ -12,7 +12,7 @@ const screenWidth = Math.round(Dimensions.get('window').width);
 export default function SearchInput(props:props) {
     const [query, OnChangeQuery] = useState('')
     const search = () => {
-      _get<Function>(props, 'myRef.current.refresh', () => {})(query)
+      _get<Function>(props, 'myRef.current.refresh', () => {})(query===''?'all':query)
       //props.myRef && props.myRef.current && props.myRef.current.refresh(query)
     }
     return (

@@ -7,14 +7,12 @@ import Example from './components/Example'
 import './router.css'
 
 const Routes = withRouter(({history, location}) => {
-  console.log(location)
   return (
-    <TransitionGroup 
-      className={'container'}>
+    <TransitionGroup className={'container'}>
       <CSSTransition
-        // key={location.pathname}
-        // timeout={500}
-        // classNames={'fade'}
+        key={location.pathname.split('/')[1]}
+        timeout={300}
+        classNames={'fade'}
       >
         <Switch location={location}>
           <Route path="/" exact render={() => <Redirect to="/login"/>} />
@@ -22,8 +20,8 @@ const Routes = withRouter(({history, location}) => {
           <Route path="/login" exact component={Login} />
           <Route path="/example" exact component={Example} />
         </Switch>
-      </CSSTransition>
-    </TransitionGroup>
+        </CSSTransition>
+     </TransitionGroup>
   )
 })
 

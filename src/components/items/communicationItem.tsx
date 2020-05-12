@@ -37,15 +37,23 @@ export default function communicationItem(props:Props) {
     icon && (icon = `${base_path}/file/${icon}`)
     //处理服务器端的图片路径
     url = url && getFile(url)
-    Image.getSize(url,() => {
-        setIsLoad(true)
-    },(err) => {
-        console.log(err)
-    })
+    if(url){
+        Image.getSize(url,() => {
+            setIsLoad(true)
+        },(err) => {
+            console.log(err)
+        })
+    }
     const jumpToDetail = () => {
-        navigation.navigate('CommunicationDetailContainer', {
+        navigation.navigate('CommunicationDetail', {
             communicationId: Id,
             title: title
+        })
+    }
+    const jumpToUserPage = (user: UserState) => {
+        navigation.navigate('UserInfo', {
+            user,
+            isEditable: false
         })
     }
     useEffect(()=>{},[isLoad])
@@ -64,7 +72,12 @@ export default function communicationItem(props:Props) {
     // })
     return (
         <View style={styles.container}>
-            <View style={styles.title}>
+            <TouchableOpacity 
+                onPress={() => {
+                    if(user) jumpToUserPage(user)
+                    else global.toast_ref.current.show('用户不存在')
+                }}
+                style={styles.title}>
                 <View style={styles.userImg}>
                     <Image style={styles.userIcon} source={{uri:(icon || 'default_header')}}></Image>
                 </View>
@@ -72,7 +85,8 @@ export default function communicationItem(props:Props) {
                     <Text>{user_name}</Text>
                     <Text>{publish_time}</Text>
                 </View>
-            </View>
+            </TouchableOpacity>
+            
             <View style={styles.content}>
                 <Text>{text}</Text>
                 {
